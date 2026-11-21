@@ -442,15 +442,18 @@ function talkMbah(){
       {w:'m',f:'senang',t:'Selamat datang di game KarsaLoka!'},
       {w:'m',f:'ramah',t:'Sugeng rawuh, {n}. Aku Mbah Loka, juru kunci Balai KarsaLoka. Mau mulai penyelidikan, atau berkeliling dulu?',ch:[
         {l:'Start Game (Misi #01)',fn:()=>{stage=1;free=false;setHud();say([
-          {w:'m',f:'serius',t:'Kasus #01: Misteri Resep Wedang Uwuh Keraton. Resep aslinya raib dari arsip balai ini!'},
-          {w:'m',f:'serius',t:'Petunjuk tinggal satu: sandi pada Batu Prasasti Kuno di sisi barat halaman. Pecahkan, {n}!'},
+          {w:'m',f:'serius',t:'Kasus #01: Misteri Resep Wedang Uwuh Keraton. Resep aslinya raib dari arsip balai ini, {n}!'},
+          {w:'m',f:'ramah',t:'Ceritanya begini. Dulu balai ini dijaga juru arsip bernama Eyang Wiryo. Beliau yang meracik Wedang Uwuh paling harum se-Imogiri.'},
+          {w:'m',f:'ramah',t:'Menjelang pensiun, Eyang takut resep aslinya jatuh ke tangan sembarang orang. Maka resep itu digulung dan disembunyikan, lalu petunjuknya diukir di batu dengan bahasa Jawa.'},
+          {w:'m',f:'serius',t:'Aku masih ingat pesan beliau: "Kalau kelak resepku hilang, carilah gulungan di meja sebelah timur. Cuma itu, jangan tanya yang lain."'},
+          {w:'m',f:'serius',t:'Sayang, aku tak pandai membaca ukiran Jawa itu. Periksalah Batu Prasasti Kuno di sisi barat halaman, siapa tahu ada kaitannya dengan pesan Eyang.'},
           {w:'p',f:'senang',t:'Siap, Mbah! Penyelidikan dimulai.'}]);}},
         {l:'Free Roam',fn:()=>{free=true;setHud();say([
           {w:'m',f:'senang',t:'Silakan berkeliling dan periksa semua objek budaya di balai ini.'},
           {w:'m',f:'ramah',t:'Ingin berganti penampilan? Tekan tombol Avatar di pojok kiri atas. Bicaralah lagi padaku bila siap menyelidiki.'}]);}}
       ]}
     ]);
-  }else if(stage===1)say([{w:'m',f:'serius',t:'Sandi di Batu Prasasti belum terpecahkan, {n}. Periksa batu tua di sisi barat halaman.'}]);
+  }else if(stage===1)say([{w:'m',f:'serius',t:'Sandi di Batu Prasasti belum terpecahkan, {n}. Ingat pesan Eyang Wiryo: carilah gulungan di meja sebelah timur. Cocokkan dengan ukiran di batu sisi barat itu.'}]);
   else if(stage===2)say([{w:'m',f:'serius',t:'Prasasti sudah bicara. Kini temukan Meja Arsip Pusaka di sisi timur. Petinya terkunci oleh pertanyaan budaya.'}]);
   else if(stage===3)say([
     {w:'m',f:'senang',t:'Gulungan itu... kau menemukannya, {n}!'},
