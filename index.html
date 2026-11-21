@@ -80,7 +80,6 @@ body.np #js,body.np #ab{display:none!important}
       <h1>Kartu Detektif KarsaLoka</h1>
       <div class="gr"><b>Nama Detektif</b><input id="nama" maxlength="14" placeholder="Tulis namamu..." autocomplete="off"></div>
       <div id="opts"></div>
-      <div class="gr"><b>Sprite PNG sendiri (opsional)</b><input type="file" id="spr" accept="image/png,image/*"></div>
       <p style="margin:10px 0 0"><button class="btn" id="go">Mulai Petualangan</button></p>
     </div>
   </div>
@@ -98,7 +97,6 @@ body.np #js,body.np #ab{display:none!important}
    misalnya src:'karsa.png'. Gambar 1 frame, menghadap KANAN;
    otomatis dibalik (flip) saat berjalan ke kiri.
    w/h = ukuran gambar di dunia game, ay = jarak telapak kaki dari atas gambar.
-   Bisa juga dimuat lewat tombol "Sprite PNG sendiri" di Kartu Detektif.
    ============================================================ */
 const CS={src:'',w:48,h:64,ay:60,scale:1,img:null,ok:false};
 function loadCS(src,auto){
@@ -571,7 +569,6 @@ $('#go').onclick=()=>{
   if(first){P.x=700;P.y=800;P.dir='up';cam.s=1;first=false;setTimeout(()=>{if(mode==='play')talkMbah();},500);}
 };
 $('#ed').onclick=()=>{if(mode==='play')openCreator(false);};
-$('#spr').onchange=e=>{const f=e.target.files[0];if(f)loadCS(URL.createObjectURL(f),true);};
 
 /* ============================================================
    INPUT
