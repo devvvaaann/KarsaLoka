@@ -46,11 +46,12 @@ button{font:inherit;color:#111;cursor:pointer}
 #opts{max-width:440px}
 .gr{margin:4px 0}.gr b{display:block;font-size:19px}
 #nama{font:inherit;font-size:22px;border:3px solid #111;border-radius:4px;padding:4px 10px;width:100%;background:#fffdf6}
-#dp{position:fixed;left:14px;bottom:calc(14px + env(safe-area-inset-bottom));display:none;grid-template-areas:". u ." "l . r" ". d .";grid-template-columns:repeat(3,56px);grid-template-rows:repeat(3,56px);gap:4px;z-index:9}
-#dp button{border:3px solid #111;background:#fff;border-radius:10px;font-size:22px;box-shadow:3px 3px 0 #111}
 #ab{position:fixed;right:18px;bottom:calc(30px + env(safe-area-inset-bottom));width:74px;height:74px;border-radius:50%;display:none;z-index:9;font-size:30px}
-@media (pointer:coarse),(max-width:820px){#dp{display:grid}#ab{display:block}#hud small{display:none}}
-body.np #dp,body.np #ab{display:none!important}
+@media (pointer:coarse),(max-width:820px){#js{display:block}#ab{display:block}#hud small{display:none}}
+body.np #js,body.np #ab{display:none!important}
+#js,#ab,.btn{touch-action:none;-webkit-touch-callout:none}
+#js{position:fixed;left:22px;bottom:calc(22px + env(safe-area-inset-bottom));width:150px;height:150px;border:4px solid #111;border-radius:50%;background:rgba(255,255,255,.75);box-shadow:5px 5px 0 #111,inset 0 0 0 3px #fff,inset 0 0 0 5px #111;display:none;z-index:9}
+#kn{position:absolute;left:50%;top:50%;width:62px;height:62px;margin:-31px 0 0 -31px;border:4px solid #111;border-radius:50%;background:#fff;box-shadow:3px 3px 0 #111;pointer-events:none}
 </style>
 </head>
 <body>
@@ -59,7 +60,7 @@ body.np #dp,body.np #ab{display:none!important}
 <div id="hud" class="box hide">
   <div class="t">Kasus #01 · Wedang Uwuh Keraton</div>
   <div id="obj"></div>
-  <small>WASD / Panah jalan · Shift lari · Spasi / Enter / Z interaksi · atau tap peta</small>
+  <small>WASD / Panah jalan · Shift lari · Spasi / Enter / Z interaksi</small>
   <button class="btn sm" id="ed">✎ Avatar</button>
 </div>
 
@@ -85,12 +86,7 @@ body.np #dp,body.np #ab{display:none!important}
   </div>
 </div>
 
-<div id="dp">
-  <button data-k="ArrowUp" style="grid-area:u">▲</button>
-  <button data-k="ArrowLeft" style="grid-area:l">◀</button>
-  <button data-k="ArrowRight" style="grid-area:r">▶</button>
-  <button data-k="ArrowDown" style="grid-area:d">▼</button>
-</div>
+<div id="js"><div id="kn"></div></div>
 <button id="ab" class="btn">A</button>
 
 <script>
@@ -135,7 +131,7 @@ addEventListener('resize',resize);resize();
 const WW=1400,WH=1000;
 const cfg={name:'Detektif',hair:'pendek',hat:'none',shirt:'#d9534f',scarf:'#f2c14e',skin:'#f1c27d',hairc:'#1b1b1b'};
 let mode='create',stage=0,free=false,t=0,first=true;
-function M(m){mode=m;document.body.classList.toggle('np',m!=='play');}
+function M(m){mode=m;document.body.classList.toggle('np',m!=='play');if(m!=='play'){for(const k in keys)keys[k]=false;AN.m=0;AN.x=AN.y=0;kn.style.transform='';jsP=null;jsTid=null;}}
 const P={x:700,y:800,dir:'up',moving:false,t:0};
 const PL={};
 const keys={};
@@ -334,13 +330,15 @@ function update(dt){
   let vx=0,vy=0;
   if(keys.ArrowLeft||keys.KeyA)vx--;if(keys.ArrowRight||keys.KeyD)vx++;
   if(keys.ArrowUp||keys.KeyW)vy--;if(keys.ArrowDown||keys.KeyS)vy++;
+  let an=0;
+  if(!vx&&!vy&&AN.m>0){vx=AN.x;vy=AN.y;an=AN.m;}
   if(vx||vy)target=null;
   else if(target){
     const dx=target.x-P.x,dy=target.y-P.y,d=Math.hypot(dx,dy);
     if(target.obj&&Math.hypot(P.x-target.obj.x,P.y-target.obj.y)<target.obj.r*.8){const id=target.obj.id;target=null;P.moving=false;interact(id);return;}
     if(d<5)target=null;else{vx=dx/d;vy=dy/d;}
   }
-  const run=keys.ShiftLeft||keys.ShiftRight,sp=run?210:120;
+  const run=keys.ShiftLeft||keys.ShiftRight;let sp=run?210:120;if(an)sp=an>.85?200:40+80*(an/.85);
   const L=Math.hypot(vx,vy);let mv=0;
   if(L){
     vx/=L;vy/=L;
@@ -601,20 +599,25 @@ addEventListener('keyup',e=>{keys[e.code]=false;});
 addEventListener('blur',()=>{for(const k in keys)keys[k]=false;});
 document.addEventListener('click',e=>{if(e.target.blur&&e.target.tagName==='BUTTON')e.target.blur();});
 
-cv.addEventListener('pointerdown',e=>{
-  ensureAudio();
-  if(mode!=='play')return;
-  const wx=cam.x+e.clientX/Z,wy=cam.y+e.clientY/Z;
-  let hit=null;
-  for(const o of OBJ){if(Math.hypot(wx-o.bx,wy-(o.by+30))<60||Math.hypot(wx-o.mk[0],wy-o.mk[1])<Math.max(o.mk[2],o.mk[3])){hit=o;break;}}
-  target=hit?{x:hit.x,y:hit.y,obj:hit}:{x:wx,y:wy};
-  ping={x:target.x,y:target.y,a:1};stuck=0;
-});
-document.querySelectorAll('#dp button').forEach(b=>{
-  const k=b.dataset.k;
-  b.onpointerdown=e=>{e.preventDefault();ensureAudio();keys[k]=true;target=null;};
-  ['pointerup','pointerleave','pointercancel'].forEach(ev=>b['on'+ev]=()=>{keys[k]=false;});
-});
+cv.addEventListener('pointerdown',()=>ensureAudio());
+/* Joystick analog: arah dari posisi jari, kecepatan dari jarak geser */
+const js=$('#js'),kn=$('#kn'),AN={x:0,y:0,m:0};
+let jsP=null,jsTid=null;
+function jsSet(cx,cy){
+  const r=js.getBoundingClientRect(),dx=cx-(r.left+r.width/2),dy=cy-(r.top+r.height/2),d=Math.hypot(dx,dy),mx=r.width/2-14,dz=10;
+  const c=Math.min(d,mx),ux=d?dx/d:0,uy=d?dy/d:0;
+  kn.style.transform='translate('+(ux*c)+'px,'+(uy*c)+'px)';
+  if(d<dz){AN.m=0;AN.x=AN.y=0;}
+  else{AN.m=Math.min(1,(d-dz)/(mx-dz));AN.x=ux;AN.y=uy;target=null;}
+}
+function jsEnd(){AN.m=0;AN.x=AN.y=0;kn.style.transform='';}
+js.addEventListener('pointerdown',e=>{e.preventDefault();ensureAudio();jsP=e.pointerId;try{js.setPointerCapture(e.pointerId);}catch(_){}jsSet(e.clientX,e.clientY);});
+js.addEventListener('pointermove',e=>{if(e.pointerId===jsP)jsSet(e.clientX,e.clientY);});
+['pointerup','pointercancel','lostpointercapture'].forEach(ev=>js.addEventListener(ev,e=>{if(e.pointerId===jsP){jsP=null;jsEnd();}}));
+js.addEventListener('touchstart',e=>{e.preventDefault();ensureAudio();const t0=e.changedTouches[0];jsTid=t0.identifier;jsSet(t0.clientX,t0.clientY);},{passive:false});
+js.addEventListener('touchmove',e=>{e.preventDefault();for(const t0 of e.changedTouches)if(t0.identifier===jsTid)jsSet(t0.clientX,t0.clientY);},{passive:false});
+['touchend','touchcancel'].forEach(ev=>js.addEventListener(ev,e=>{for(const t0 of e.changedTouches)if(t0.identifier===jsTid){jsTid=null;jsEnd();}}));
+js.oncontextmenu=e=>e.preventDefault();
 $('#ab').onpointerdown=e=>{e.preventDefault();ensureAudio();if(mode==='play'){const o=near();if(o)interact(o.id);}};
 
 /* ============================================================
