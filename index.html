@@ -1,637 +1,1110 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
-<title>KarsaLoka: Petualangan Detektif Budaya</title>
-<link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+<title>KarsaLoka: Petualangan Detektif Budaya Nusantara</title>
 <style>
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;height:100%;background:#f6f3eb;overflow:hidden;font-family:'Patrick Hand','Comic Sans MS',cursive;color:#111;touch-action:none;user-select:none;-webkit-user-select:none}
-#c{position:fixed;inset:0;width:100%;height:100%;display:block}
-body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:5;background:radial-gradient(ellipse at center,transparent 55%,rgba(70,45,20,.22))}
-.box{background:#fff;border:4px solid #111;border-radius:6px;box-shadow:inset 0 0 0 3px #fff,inset 0 0 0 5px #111,8px 8px 0 #111}
-.hide{display:none!important}
-button{font:inherit;color:#111;cursor:pointer}
-.btn{background:#fff;border:3px solid #111;border-radius:4px;padding:5px 14px;font-size:21px;box-shadow:3px 3px 0 #111}
-.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #111}
-.btn.on,.btn.sel{background:#111;color:#fff}
-.btn.sel::before{content:"▶ "}
-.btn.sm{font-size:18px;padding:2px 10px;margin:3px}
-.sw{width:34px;height:34px;border:3px solid #111;border-radius:50%;margin:3px;box-shadow:2px 2px 0 #111}
-.sw.on{outline:3px solid #111;outline-offset:2px}
-#hud{position:fixed;left:12px;top:12px;max-width:min(350px,72vw);padding:12px 16px;z-index:10;font-size:19px;line-height:1.2}
-#hud .t{font-size:22px;font-weight:bold;border-bottom:2px dashed #111;margin-bottom:4px}
-#hud small{display:block;opacity:.65;font-size:15px;margin:4px 0 6px}
-#dlg{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(880px,94vw);z-index:20;display:flex;gap:14px;padding:16px;min-height:140px}
-#por{width:112px;height:112px;border:3px solid #111;background:#f6f3eb;flex:none}
-#nm{position:absolute;top:-24px;left:24px;background:#111;color:#fff;padding:1px 18px;font-size:23px;border-radius:5px 5px 0 0}
-#tx{flex:1;line-height:1.3;font-family:'Courier Prime',monospace;font-size:19px;white-space:pre-wrap;align-self:center}
-#nx{position:absolute;right:18px;bottom:8px;animation:bl .8s infinite}
-@keyframes bl{50%{opacity:0}}
-#ch{position:absolute;right:16px;bottom:100%;margin-bottom:16px;display:flex;flex-direction:column;gap:10px;align-items:stretch}
-#modal{position:fixed;inset:0;z-index:30;background:rgba(246,243,235,.88);display:flex;align-items:center;justify-content:center;padding:12px}
-#mb{padding:22px 26px;width:min(760px,96vw);max-height:94vh;overflow:auto;font-size:22px}
-#mb h2{margin:0 0 6px;font-size:30px}
-.jv{font-family:'Courier Prime',monospace;font-size:21px;background:#f6f3eb;border:3px dashed #111;padding:10px;margin:8px 0}
-.zone{min-height:66px;border:3px dashed #111;border-radius:6px;padding:6px;margin:10px 0;background:repeating-linear-gradient(#fff 0 40px,#e9e2d0 40px 42px)}
-.blk{margin:4px;font-size:22px}
-.opt{display:block;width:100%;text-align:left;margin:8px 0}
-.shake{animation:sh .35s}
-@keyframes sh{20%{transform:translateX(-9px)}40%{transform:translateX(9px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
-#card{position:fixed;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;padding:10px;overflow:auto;background:#f6f3eb url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='6' height='6'%3E%3Crect width='1' height='1' fill='%23b49a6e' opacity='.18'/%3E%3C/svg%3E")}
-#cb{display:flex;gap:22px;padding:22px 26px;max-width:880px;flex-wrap:wrap;justify-content:center;margin:auto}
-#cb h1{margin:0 0 4px;font-size:34px;line-height:1}
-#pv{width:240px;height:280px;border:4px solid #111;background:#fbf9f3;box-shadow:5px 5px 0 #111}
-#opts{max-width:440px}
-.gr{margin:4px 0}.gr b{display:block;font-size:19px}
-#nama{font:inherit;font-size:22px;border:3px solid #111;border-radius:4px;padding:4px 10px;width:100%;background:#fffdf6}
-#ab{position:fixed;right:18px;bottom:calc(30px + env(safe-area-inset-bottom));width:74px;height:74px;border-radius:50%;display:none;z-index:9;font-size:30px}
-#js{display:none}
-@media (pointer:coarse),(max-width:820px){#js{display:block}#ab{display:block}#hud small{display:none}}
-body.np #js,body.np #ab{display:none!important}
-#js,#ab,.btn{touch-action:none;-webkit-touch-callout:none}
-#js{position:fixed;left:22px;bottom:calc(22px + env(safe-area-inset-bottom));width:150px;height:150px;border:4px solid #111;border-radius:50%;background:rgba(255,255,255,.75);box-shadow:5px 5px 0 #111,inset 0 0 0 3px #fff,inset 0 0 0 5px #111;z-index:9}
-#kn{position:absolute;left:50%;top:50%;width:62px;height:62px;margin:-31px 0 0 -31px;border:4px solid #111;border-radius:50%;background:#fff;box-shadow:3px 3px 0 #111;pointer-events:none}
+  @import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0;user-select:none;-webkit-user-select:none}
+  html,body{width:100vw;height:100vh;overflow:hidden;background:#111;display:flex;align-items:center;justify-content:center;font-family:'Patrick Hand','Courier New',monospace;color:#111}
+  #wrap{position:relative;width:100vw;height:100vh;max-width:1080px;max-height:700px;background:#fcfbf7;border:4px solid #111;box-shadow:0 0 0 4px #fcfbf7,0 0 0 8px #111,0 24px 60px rgba(0,0,0,.85);overflow:hidden}
+  canvas#gc{display:block;width:100%;height:100%;cursor:pointer}
+
+  .card{background:#fff;border:3.5px solid #111;box-shadow:7px 7px 0 #111;position:relative;padding:22px 24px}
+  .card::after{content:'';position:absolute;inset:4px;border:1.5px solid #111;pointer-events:none}
+  .btn{background:#111;color:#fff;border:2.5px solid #111;font-family:inherit;font-size:1.25rem;padding:8px 20px;cursor:pointer;box-shadow:3px 3px 0 #555}
+  .btn:hover{background:#2d2d30}
+  .btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #555}
+  .btn.sec{background:#fff;color:#111;box-shadow:3px 3px 0 #111}
+  .btn.sec:hover{background:#f0ede4}
+  .btn.red{background:#d9381e;border-color:#111;box-shadow:3px 3px 0 #111}
+  .btn.red:hover{background:#b92b15}
+
+  .ov{position:absolute;inset:0;background:rgba(247,245,240,.96);display:none;align-items:center;justify-content:center;z-index:40;padding:16px}
+  .ov.dark{background:rgba(17,17,17,.78)}
+
+  /* MAIN MENU */
+  #scr-menu{display:flex;flex-direction:column;text-align:center}
+  .title-logo{font-size:3.2rem;letter-spacing:3px;line-height:1;margin-bottom:4px;text-shadow:3px 3px 0 #e2ddd0}
+  .subtitle{font-size:1.25rem;color:#333;margin-bottom:14px}
+  .menu-btns{display:flex;flex-direction:column;gap:10px;max-width:300px;margin:0 auto;width:100%}
+
+  /* PETA NUSANTARA */
+  #scr-map .card{max-width:920px;width:100%;padding:16px 20px}
+  .map-wrap{position:relative;width:100%;border:3px solid #111;background:#3b69c4;overflow:hidden;box-shadow:4px 4px 0 #111}
+  .map-img{display:block;width:100%;height:auto;max-height:430px;object-fit:fill}
+  #map-pins-layer{position:absolute;inset:0;pointer-events:none}
+
+  @keyframes pinWobble{
+    0%,100%{transform:translate(-50%,-100%) translateY(0) rotate(0deg)}
+    25%{transform:translate(-50%,-100%) translateY(-4px) rotate(-4deg)}
+    50%{transform:translate(-50%,-100%) translateY(-6px) rotate(0deg)}
+    75%{transform:translate(-50%,-100%) translateY(-3px) rotate(4deg)}
+  }
+  .map-pin-btn{
+    position:absolute;
+    transform:translate(-50%,-100%);
+    transform-origin:50% 100%;
+    background:transparent;
+    border:none;
+    padding:0;
+    cursor:pointer;
+    pointer-events:auto;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    animation:pinWobble 2.2s ease-in-out infinite;
+    z-index:5;
+  }
+  .map-pin-btn:hover{
+    animation-play-state:paused;
+    transform:translate(-50%,-100%) scale(1.16);
+    z-index:20;
+  }
+  .map-pin-btn.locked{cursor:not-allowed}
+
+  /* Kotak tulisan sketsa di atas pin merah saat disentuh / hover */
+  .pin-label-box{
+    position:absolute;
+    bottom:104%;
+    left:50%;
+    transform:translateX(-50%);
+    background:#111;
+    color:#fff;
+    font-size:.86rem;
+    padding:3px 9px;
+    border:1.5px solid #fff;
+    box-shadow:2px 2px 0 #111;
+    white-space:nowrap;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .15s, transform .15s;
+    margin-bottom:4px;
+  }
+  .pin-label-box::after{
+    content:'';
+    position:absolute;
+    top:100%;
+    left:50%;
+    margin-left:-5px;
+    border-width:5px;
+    border-style:solid;
+    border-color:#111 transparent transparent transparent;
+  }
+  .map-pin-btn:hover .pin-label-box,
+  .map-pin-btn:focus .pin-label-box{
+    opacity:1;
+    transform:translateX(-50%) translateY(-2px);
+  }
+
+  .map-toast{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);background:#111;color:#fff;border:2px solid #fff;padding:5px 14px;font-size:1rem;white-space:nowrap;display:none;z-index:25}
+  .cipher-bar{background:#f7f5f0;border:2px dashed #111;padding:8px 12px;margin-top:10px;font-size:1.05rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+
+  /* HUD IN-GAME */
+  #hud{position:absolute;top:12px;left:12px;right:12px;display:none;justify-content:space-between;align-items:flex-start;pointer-events:none;z-index:15;gap:10px}
+  .hud-box{background:#fff;border:3px solid #111;box-shadow:4px 4px 0 #111;padding:7px 12px;position:relative;pointer-events:auto}
+  .hud-box::after{content:'';position:absolute;inset:2px;border:1.5px solid #111;pointer-events:none}
+  .tag{background:#111;color:#fff;font-size:.82rem;padding:1px 7px;margin-left:6px}
+  .tag.red{background:#d9381e}
+  .obj-line{font-size:.98rem;margin-top:4px;padding-top:4px;border-top:1.5px dashed #111;color:#222}
+
+  /* DIALOG OMORI */
+  #dlg{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);width:93%;max-width:780px;display:none;flex-direction:column;z-index:25}
+  .dlg-top{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:-3px;z-index:2}
+  .spk{background:#111;color:#fff;border:3px solid #111;border-bottom:none;padding:3px 16px;font-size:1.15rem;letter-spacing:1px}
+  .port{width:96px;height:96px;background:#fff;border:3px solid #111;box-shadow:4px 4px 0 #111;position:relative}
+  .port::after{content:'';position:absolute;inset:3px;border:1.5px solid #111;pointer-events:none}
+  .dlg-box{background:#fff;border:3px solid #111;box-shadow:6px 6px 0 #111;padding:14px 18px;min-height:110px;position:relative;display:flex;flex-direction:column;justify-content:space-between}
+  .dlg-box::after{content:'';position:absolute;inset:3px;border:1.5px solid #111;pointer-events:none}
+  #dlg-txt{font-size:1.32rem;line-height:1.35}
+  .dlg-next{align-self:flex-end;font-size:.9rem;color:#555;animation:bob .7s infinite alternate}
+  @keyframes bob{from{transform:translateY(0)}to{transform:translateY(-3px)}}
+
+  /* MINI-GAME MODAL */
+  .mg-card{max-width:580px;width:100%}
+  .mg-head{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #111;padding-bottom:6px;margin-bottom:12px}
+  .slots{min-height:50px;border:2px dashed #111;background:#fcfbf7;padding:8px;display:flex;flex-wrap:wrap;gap:7px;margin:10px 0}
+  .bank{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin:10px 0}
+  .chip{background:#fff;border:2px solid #111;box-shadow:2px 2px 0 #111;padding:5px 12px;font-family:inherit;font-size:1.15rem;cursor:pointer}
+  .chip.in{background:#111;color:#fff}
+  .chip.used{opacity:.25;pointer-events:none;box-shadow:none}
+  .opt-btn{display:block;width:100%;text-align:left;background:#fff;border:2.5px solid #111;box-shadow:3px 3px 0 #111;padding:9px 14px;margin-bottom:8px;font-family:inherit;font-size:1.15rem;cursor:pointer}
+  .opt-btn.sel{background:#111;color:#fff}
+  .angklung-row{display:flex;justify-content:center;gap:10px;margin:16px 0}
+  .bamboo{width:56px;height:130px;background:#e3c896;border:3px solid #111;box-shadow:4px 4px 0 #111;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;padding-bottom:8px;font-weight:bold;font-size:1.2rem;cursor:pointer;transition:transform .08s}
+  .bamboo.lit{background:#d9381e;color:#fff;transform:translateY(-6px)}
+  .fb{min-height:24px;font-weight:bold;margin:8px 0;font-size:1.1rem}
+  .fb.ok{color:#1d7a3c}.fb.err{color:#d9381e}
+
+  /* JOYSTICK ANALOG SENTUH */
+  #touch-ui{position:absolute;inset:0;pointer-events:none;z-index:18;display:none}
+  #joy-zone{position:absolute;left:18px;bottom:18px;width:124px;height:124px;border-radius:50%;background:rgba(255,255,255,.55);border:3px solid #111;box-shadow:3px 3px 0 #111;pointer-events:auto;touch-action:none}
+  #joy-knob{position:absolute;left:50%;top:50%;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;background:#111;border:2.5px solid #fff}
+  #act-btn{position:absolute;right:22px;bottom:26px;width:72px;height:72px;border-radius:50%;background:#d9381e;color:#fff;border:3px solid #111;box-shadow:4px 4px 0 #111;font-family:inherit;font-size:1.25rem;font-weight:bold;pointer-events:auto;cursor:pointer}
+
+  @media(pointer:coarse),(max-width:768px){#touch-ui.active{display:block}.hide-mob{display:none}}
 </style>
 </head>
 <body>
-<canvas id="c"></canvas>
+<div id="wrap">
+  <canvas id="gc"></canvas>
 
-<div id="hud" class="box hide">
-  <div class="t">Kasus #01 · Wedang Uwuh Keraton</div>
-  <div id="obj"></div>
-  <small>WASD / Panah jalan · Shift lari · Spasi / Enter / Z interaksi</small>
-  <button class="btn sm" id="ed">✎ Avatar</button>
-</div>
-
-<div id="dlg" class="box hide">
-  <div id="nm" class="hide"></div>
-  <canvas id="por" width="224" height="224"></canvas>
-  <div id="tx"></div><span id="nx">▼</span>
-  <div id="ch"></div>
-</div>
-
-<div id="modal" class="hide"></div>
-
-<div id="card">
-  <div id="cb" class="box">
-    <div><canvas id="pv" width="480" height="560"></canvas></div>
-    <div id="opts-wrap">
-      <h1>Kartu Detektif KarsaLoka</h1>
-      <div class="gr"><b>Nama Detektif</b><input id="nama" maxlength="14" placeholder="Tulis namamu..." autocomplete="off"></div>
-      <div id="opts"></div>
-      <p style="margin:10px 0 0"><button class="btn" id="go">Mulai Petualangan</button></p>
+  <!-- HUD -->
+  <div id="hud">
+    <div class="hud-box">
+      <div style="font-size:1.1rem;font-weight:bold">
+        <span id="hud-loc">BALAI KARSALOKA</span>
+        <span class="tag red" id="hud-badge">MISI AKTIF</span>
+      </div>
+      <div class="obj-line"><b>Petunjuk:</b> <span id="hud-obj">Bicara dengan Penjaga Loka</span></div>
     </div>
+    <div style="display:flex;gap:8px;align-items:flex-start">
+      <div class="hud-box hide-mob" style="font-size:.9rem;line-height:1.25">
+        <b>WASD/Panah</b>: Jalan &nbsp;|&nbsp; <b>Shift</b>: Lari<br>
+        <b>Spasi/Enter/Klik</b>: Periksa & Dialog
+      </div>
+      <button class="btn sec" style="padding:6px 12px;font-size:1rem" onclick="openMap()">🗺️ Peta Nusantara</button>
+    </div>
+  </div>
+
+  <!-- ANALOG JOYSTICK + AKSI -->
+  <div id="touch-ui">
+    <div id="joy-zone"><div id="joy-knob"></div></div>
+    <button id="act-btn">PERIKSA</button>
+  </div>
+
+  <!-- DIALOG -->
+  <div id="dlg">
+    <div class="dlg-top">
+      <div class="spk" id="dlg-spk">MBAH LOKA</div>
+      <div class="port" id="dlg-port-wrap"><canvas id="pc" width="96" height="96"></canvas></div>
+    </div>
+    <div class="dlg-box" onclick="advDialog()">
+      <div id="dlg-txt"></div>
+      <div class="dlg-next" id="dlg-hint">[Spasi / Klik untuk lanjut ▼]</div>
+    </div>
+  </div>
+
+  <!-- 1. MAIN MENU -->
+  <div class="ov" id="scr-menu" style="display:flex">
+    <div class="card" style="max-width:660px;width:100%">
+      <div style="font-size:1rem;letter-spacing:2px;color:#555">PAGUYUBAN DETEKTIF BUDAYA NUSANTARA</div>
+      <h1 class="title-logo">KARSALOKA</h1>
+      <p class="subtitle">Ungkap misteri pencurian pusaka Komplotan Bayang Sengkala lintas pulau!</p>
+      <canvas id="menu-cast" width="520" height="110" style="max-width:100%;margin:4px auto 12px;display:block;border:2px solid #111;background:#f7f5f0"></canvas>
+      <div class="menu-btns">
+        <button class="btn red" onclick="openCard()">▶ MULAI INVESTIGASI</button>
+        <button class="btn sec" onclick="openBadges()">🏅 ARSIP LENCANA & SANDI (<span id="badge-cnt">0</span>/4)</button>
+        <button class="btn sec" onclick="howto()">📜 CARA BERMAIN</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. KARTU DETEKTIF -->
+  <div class="ov" id="scr-card">
+    <div class="card" style="max-width:440px;width:100%;text-align:center">
+      <h2 style="font-size:1.7rem;border-bottom:2px solid #111;padding-bottom:6px;margin-bottom:12px">KARTU DETEKTIF KARSALOKA</h2>
+      <p style="font-size:1.1rem;margin-bottom:12px">Masukkan nama panggilanmu sebagai anggota Paguyuban Detektif Nusantara:</p>
+      <input id="inp-name" type="text" maxlength="14" value="KARSA" style="font-family:inherit;font-size:1.4rem;text-align:center;padding:8px;border:3px solid #111;width:100%;background:#fcfbf7;margin-bottom:14px"/>
+      <div style="display:flex;gap:10px;justify-content:center">
+        <button class="btn sec" onclick="showOv('scr-menu')">Kembali</button>
+        <button class="btn" onclick="startProlog()">Lanjut ke Prolog ▶</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. PROLOG TELEGRAM -->
+  <div class="ov" id="scr-prolog">
+    <div class="card" style="max-width:580px;width:100%">
+      <div style="display:flex;justify-content:space-between;border-bottom:2px solid #111;padding-bottom:6px;margin-bottom:12px">
+        <b>📨 TELEGRAM DARURAT — PUSAT KARSALOKA</b>
+        <span>RAHASIA</span>
+      </div>
+      <p style="font-size:1.22rem;line-height:1.45;margin-bottom:14px">
+        "Salam Nusantara, Detektif <b id="prolog-name">KARSA</b>! Komplotan misterius <b>Bayang Sengkala</b> baru saja beraksi serentak di 4 wilayah budaya kita: <b>Yogyakarta, Bali, Jawa Barat, dan Sumatera Barat</b>.<br><br>
+        Mereka mencuri pusaka warisan dan meninggalkan potongan sandi. Segera pilih wilayah di <b>Peta Misi Nusantara</b>, temui Penjaga Loka setempat, dan selamatkan budaya kita!"
+      </p>
+      <div style="text-align:right">
+        <button class="btn red" onclick="openMap()">BUKA PETA MISI NUSANTARA 🗺️</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. PETA MISI NUSANTARA -->
+  <div class="ov" id="scr-map">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:8px">
+        <div>
+          <h2 style="font-size:1.55rem;line-height:1.1">Peta Misi Nusantara</h2>
+          <p style="font-size:.98rem;color:#333">Arahkan kursor dan klik pin merah di peta untuk menyelidiki kasus pencurian Komplotan Bayang Sengkala!</p>
+        </div>
+        <button class="btn sec" style="padding:5px 12px;font-size:1rem" onclick="showOv('scr-menu')">Menu Utama</button>
+      </div>
+
+      <div class="map-wrap">
+        <img src="karsaloka-map.jpg" alt="Peta Misi Nusantara" class="map-img"/>
+        <div id="map-pins-layer"></div>
+        <div id="map-toast" class="map-toast"></div>
+      </div>
+
+      <div class="cipher-bar">
+        <div><b>Pesan sandi komplotan (<span id="ciph-cnt">0</span>/4):</b> <span id="ciph-txt" style="letter-spacing:1px;font-weight:bold"></span></div>
+        <button class="btn red" id="btn-epilog" style="display:none;padding:5px 12px;font-size:1rem" onclick="openEpilog()">🔓 BUKA EPILOG AKHIR</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. MINI-GAME MODAL -->
+  <div class="ov dark" id="scr-mg">
+    <div class="card mg-card">
+      <div class="mg-head">
+        <span class="tag red" id="mg-tag" style="margin:0;font-size:.95rem">TANTANGAN BUDAYA</span>
+        <b id="mg-step">Tahap 1/2</b>
+      </div>
+      <div id="mg-prompt" style="font-size:1.25rem;margin-bottom:8px"></div>
+      <div id="mg-clue" style="background:#efeadd;border-left:4px solid #111;padding:8px 12px;font-size:1.15rem;font-weight:bold;margin-bottom:10px"></div>
+      <div id="mg-body"></div>
+      <div class="fb" id="mg-fb"></div>
+      <div style="display:flex;justify-content:space-between;gap:10px">
+        <button class="btn sec" onclick="closeMg()">Tutup</button>
+        <button class="btn" id="mg-submit" onclick="checkMg()">PERIKSA JAWABAN</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. KEMENANGAN DAERAH / ARSIP / EPILOG -->
+  <div class="ov dark" id="scr-modal">
+    <div class="card" style="max-width:500px;width:100%;text-align:center" id="modal-content"></div>
   </div>
 </div>
 
-<div id="js"><div id="kn"></div></div>
-<button id="ab" class="btn">A</button>
-
 <script>
-'use strict';
-/* ============================================================
-   KARSALOKA: PETUALANGAN DETEKTIF BUDAYA
-   ------------------------------------------------------------
-   CUSTOM SPRITE PNG: isi `src` dengan nama file gambar karaktermu,
-   misalnya src:'karsa.png'. Gambar 1 frame, menghadap KANAN;
-   otomatis dibalik (flip) saat berjalan ke kiri.
-   w/h = ukuran gambar di dunia game, ay = jarak telapak kaki dari atas gambar.
-   ============================================================ */
-const CS={src:'',w:48,h:64,ay:60,scale:1,img:null,ok:false};
-function loadCS(src,auto){
-  if(!src)return;
-  const im=new Image();
-  im.onload=()=>{CS.img=im;CS.ok=true;if(auto){CS.h=64;CS.w=Math.round(64*im.naturalWidth/im.naturalHeight);CS.ay=60;}};
-  im.onerror=()=>{CS.ok=false;};
-  im.src=src;
+/* =========================================================
+   WEB AUDIO SYNTH (SFX & NADA ANGKLUNG)
+========================================================= */
+let actx = null;
+function beep(freq=440, dur=0.09, type='triangle', vol=0.14){
+  try{
+    if(!actx) actx = new (window.AudioContext||window.webkitAudioContext)();
+    const o = actx.createOscillator(), g = actx.createGain();
+    o.type = type; o.frequency.value = freq;
+    g.gain.setValueAtTime(vol, actx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, actx.currentTime + dur);
+    o.connect(g); g.connect(actx.destination);
+    o.start(); o.stop(actx.currentTime + dur);
+  }catch(e){}
 }
-loadCS(CS.src,false);
-
-/* ---------- util ---------- */
-const $=s=>document.querySelector(s);
-const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]];}return a;};
-if(!CanvasRenderingContext2D.prototype.roundRect){
-  CanvasRenderingContext2D.prototype.roundRect=function(x,y,w,h,r){r=Math.min(r,w/2,h/2);this.moveTo(x+r,y);this.arcTo(x+w,y,x+w,y+h,r);this.arcTo(x+w,y+h,x,y+h,r);this.arcTo(x,y+h,x,y,r);this.arcTo(x,y,x+w,y,r);this.closePath();};
+function sfx(k){
+  if(k==='click') beep(520,0.06,'square',0.08);
+  if(k==='ok'){ beep(523,0.1); setTimeout(()=>beep(659,0.1),90); setTimeout(()=>beep(784,0.18),180); }
+  if(k==='err'){ beep(190,0.18,'sawtooth',0.12); }
 }
-function ink(g,w){g.lineWidth=w||2;g.strokeStyle='#111';g.lineJoin='round';g.lineCap='round';}
-function dbl(g){g.stroke();g.save();g.translate(.9,-.9);g.globalAlpha*=.3;g.stroke();g.restore();}
-function rr(g,x,y,w,h,r,f){g.beginPath();g.roundRect(x,y,w,h,r);if(f){g.fillStyle=f;g.fill();}dbl(g);}
-function poly(g,p,f){g.beginPath();p.forEach((q,i)=>i?g.lineTo(q[0],q[1]):g.moveTo(q[0],q[1]));g.closePath();if(f){g.fillStyle=f;g.fill();}dbl(g);}
-function circ(g,x,y,r,f){g.beginPath();g.arc(x,y,r,0,7);if(f){g.fillStyle=f;g.fill();}dbl(g);}
 
-/* ---------- kanvas & state ---------- */
-const cv=$('#c'),g=cv.getContext('2d');
-let W,H,DPR,Z;
-function resize(){DPR=Math.min(window.devicePixelRatio||1,2);W=innerWidth;H=innerHeight;cv.width=W*DPR;cv.height=H*DPR;Z=Math.max(1.15,Math.min(W/640,H/460));}
-addEventListener('resize',resize);resize();
-
-const WW=1400,WH=1000;
-const cfg={name:'Detektif',hair:'pendek',hat:'none',shirt:'#d9534f',scarf:'#f2c14e',skin:'#f1c27d',hairc:'#1b1b1b'};
-let mode='create',stage=0,free=false,t=0,first=true;
-function M(m){mode=m;document.body.classList.toggle('np',m!=='play');if(m!=='play'){for(const k in keys)keys[k]=false;AN.m=0;AN.x=AN.y=0;kn.style.transform='';jsP=null;jsTid=null;}}
-const P={x:700,y:800,dir:'up',moving:false,t:0};
-const PL={};
-const keys={};
-let target=null,ping=null,stuck=0;
-const cam={x:0,y:0,s:1};
-const boil={x:0,y:0,r:0};
-
-const MBAH={skin:'#c99a6e',shirt:'#7c8aa0',scarf:'#8a5a44',hair:'pendek',hairc:'#d6d6d6',hat:'blangkon',lurik:true,stache:true,npc:true,dir:'down',expr:'ramah',t:0};
-
-/* ---------- objek, tabrakan ---------- */
-const SOL=[[520,215,360,120],[604,890,56,40],[740,890,56,40],[202,500,56,30],[1075,528,110,38],[248,238,64,40],[686,378,28,14]];
-const OBJ=[
- {id:'mbah',x:700,y:420,r:70,bx:700,by:322,mk:[700,372,34,54]},
- {id:'prasasti',x:230,y:565,r:70,bx:230,by:425,mk:[230,492,48,70]},
- {id:'meja',x:1130,y:605,r:80,bx:1130,by:470,mk:[1130,540,84,58]},
- {id:'beringin',x:280,y:315,r:70,bx:280,by:60,mk:[280,245,66,60]},
- {id:'gapura',x:700,y:860,r:90,bx:700,by:770,mk:[700,900,110,60]},
- {id:'pendopo',x:700,y:352,r:50,bx:700,by:52,mk:[700,250,190,110]}
-];
-const OID={};OBJ.forEach(o=>OID[o.id]=o);
-function blocked(x,y){
-  if(x<30||x>WW-30||y<60||y>WH-20)return true;
-  for(const s of SOL)if(x+9>s[0]&&x-9<s[0]+s[2]&&y+5>s[1]&&y-5<s[1]+s[3])return true;
-  return false;
-}
-function near(){let b=null,bd=1e9;for(const o of OBJ){const d=Math.hypot(P.x-o.x,P.y-o.y);if(d<o.r&&d<bd){b=o;bd=d;}}return b;}
-
-/* ---------- suara ---------- */
-let AC;
-function ensureAudio(){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume();}catch(e){}}
-function blip(f){if(!AC)return;try{const o=AC.createOscillator(),v=AC.createGain();o.type='square';o.frequency.value=f+Math.random()*60;v.gain.value=.022;o.connect(v);v.connect(AC.destination);o.start();v.gain.exponentialRampToValueAtTime(.0001,AC.currentTime+.05);o.stop(AC.currentTime+.06);}catch(e){}}
-
-/* ============================================================
-   GAMBAR KARAKTER (gaya sketsa)
-   ============================================================ */
-function drawChar(g,x,y,o,sc){
-  sc=sc||1;let d=o.dir||'down';
-  const moving=!!o.moving,tt=o.t||0;
-  const bob=moving?-Math.abs(Math.sin(tt*14))*2.5:Math.sin(tt*2)*.6,st=moving?Math.sin(tt*14):0;
-  g.save();g.translate(x,y);g.scale(sc,sc);
-  g.fillStyle='rgba(0,0,0,.18)';g.beginPath();g.ellipse(0,0,13,5,0,0,7);g.fill();
-  if(CS.ok&&!o.noCustom&&!o.npc){
-    if(d==='left')g.scale(-1,1);
-    g.drawImage(CS.img,-CS.w/2*CS.scale,(-CS.ay+bob)*CS.scale,CS.w*CS.scale,CS.h*CS.scale);
-    g.restore();return;
+/* =========================================================
+   DATA 4 WILAYAH NUSANTARA + 3 WILAYAH SEGERA HADIR
+========================================================= */
+const REG = {
+  sumbar: {
+    id:'sumbar', name:'SUMATERA BARAT', loc:'NAGARI MINANGKABAU',
+    keeper:'UNI RAHMI', hat:'tikuluak', outfit:'#9e2a2b', scarf:'#f4d35e',
+    badge:'Penjaga Pusaka Minang', cipher:'PUSAKA',
+    bg:'#edf2e6', path:'#dfd3bc',
+    intro:'Selamat datang di Ranah Minang! Komplotan Bayang Sengkala merobek 4 serpihan naskah resep Rendang Pusaka dan menyebarnya di sekitar lapak pasar!',
+    obj1:'Kumpulkan 4 serpihan naskah yang tersebar di area nagari (0/4)',
+    obj2:'Periksa Peti Adat di depan Rumah Gadang untuk mengunci kembali pusaka!',
+    objs:[
+      {id:'gadang', name:'RUMAH GADANG', type:'gadang', x:700, y:290, w:260, h:110, solid:true, desc:'Rumah adat Minangkabau beratap gonjong melengkung menyerupai tanduk kerbau.'},
+      {id:'rangkiang', name:'RANGKIANG PADI', type:'rangkiang', x:450, y:330, w:80, h:70, solid:true, desc:'Lumbung penyimpan padi adat yang melambangkan kesejahteraan masyarakat Minangkabau.'},
+      {id:'jam', name:'TUGU JAM GADANG', type:'jam', x:960, y:340, w:76, h:90, solid:true, desc:'Menara jam ikonik Bukittinggi dengan atap gonjong khas Ranah Minang.'},
+      {id:'peti_minang', name:'PETI TONGGAK GADANG', type:'chest', x:700, y:430, w:74, h:48, solid:true, desc:'Peti penyimpanan naskah adat Minangkabau.'},
+      {id:'s1', name:'SERPIHAN #1', type:'scrap', x:360, y:560, w:36, h:36, solid:false, scrapIdx:0},
+      {id:'s2', name:'SERPIHAN #2', type:'scrap', x:1040, y:540, w:36, h:36, solid:false, scrapIdx:1},
+      {id:'s3', name:'SERPIHAN #3', type:'scrap', x:420, y:760, w:36, h:36, solid:false, scrapIdx:2},
+      {id:'s4', name:'SERPIHAN #4', type:'scrap', x:980, y:770, w:36, h:36, solid:false, scrapIdx:3}
+    ]
+  },
+  jabar: {
+    id:'jabar', name:'JAWA BARAT', loc:'KAMPUNG BUDAYA SUNDA',
+    keeper:'TEH NIA', hat:'iket', outfit:'#2b5876', scarf:'#f6d365',
+    badge:'Penjaga Harmoni Sunda', cipher:'BUDAYA',
+    bg:'#eef4ea', path:'#e5dcc5',
+    intro:'Sampurasun! Angklung Buhun pusaka desa dicuri! Tiga warga melihat arah pelarian pencuri, tapi salah satu dari mereka berbohong. Wawancarai ketiganya lalu temukan kebohongannya!',
+    obj1:'Wawancarai 3 saksi warga (Kang Dedi, Neng Sari, Mang Ujang) (0/3)',
+    obj2:'Periksa Rak Angklung Buhun di depan Saung untuk membunyikan sandi nada!',
+    objs:[
+      {id:'saung', name:'SAUNG ANGKLUNG', type:'pavilion', x:700, y:290, w:240, h:105, solid:true, desc:'Balai seni bambu khas Tatar Sunda tempat menyimpan Angklung Buhun.'},
+      {id:'rak_angklung', name:'RAK ANGKLUNG BUHUN', type:'angklung', x:700, y:420, w:88, h:52, solid:true, desc:'Deretan tabung bambu angklung bernada diatonis.'},
+      {id:'leuit', name:'LEUIT PADI SUNDA', type:'rangkiang', x:1020, y:340, w:82, h:72, solid:true, desc:'Lumbung padi tradisional masyarakat Sunda sebagai lambang ketahanan pangan.'},
+      {id:'w1', name:'KANG DEDI', type:'witness', x:420, y:520, w:44, h:54, solid:true, wIdx:0, statement:'"Abdi ningali bayangan hideung lumpat ka arah kulon (barat) bari mawa kantong awi."'},
+      {id:'w2', name:'NENG SARI', type:'witness', x:980, y:540, w:44, h:54, solid:true, wIdx:1, statement:'"Sumuhun, abdi ge ningali jelema eta lumpat ka kulon sanggeus sora angklung disada."'},
+      {id:'w3', name:'MANG UJANG', type:'witness', x:520, y:740, w:44, h:54, solid:true, wIdx:2, statement:'"Henteu aya sasaha nu ka kulon! Kuring cicing di gerbang kulon ti isuk nepi ka ayeuna."'}
+    ]
+  },
+  jogja: {
+    id:'jogja', name:'YOGYAKARTA', loc:'BALAI KARSALOKA MATARAM',
+    keeper:'MBAH LOKA', hat:'blangkon', outfit:'#2c2c34', scarf:'#d9381e',
+    badge:'Detektif Aksara Mataram', cipher:'HARUS',
+    bg:'#f6f3eb', path:'#e7e1d3',
+    intro:'Sugeng rawuh! Komplotan Bayang Sengkala menyembunyikan Gulungan Resep Wedang Uwuh Keraton dan meninggalkan sandi Bahasa Jawa pada Batu Prasasti Kuno!',
+    obj1:'Periksa Batu Prasasti Kuno di sisi kiri pendopo untuk menerjemahkan sandi',
+    obj2:'Buka Peti di Meja Arsip Pusaka sebelah timur pendopo!',
+    objs:[
+      {id:'pendopo', name:'PENDOPO MATARAM', type:'pavilion', x:700, y:300, w:240, h:105, solid:true, desc:'Balai pertemuan berarsitektur Joglo khas Yogyakarta.'},
+      {id:'prasasti', name:'BATU PRASASTI KUNO', type:'stone', x:420, y:490, w:64, h:68, solid:true, desc:'Prasasti batu berukir kalimat Bahasa Jawa halus.'},
+      {id:'meja_arsip', name:'MEJA ARSIP PUSAKA', type:'table', x:980, y:490, w:94, h:56, solid:true, desc:'Meja kayu penuh gulungan naskah dan peti pusaka terkunci.'},
+      {id:'tugu', name:'MINIATUR TUGU GOLONG GILIG', type:'tugu', x:700, y:760, w:64, h:64, solid:true, desc:'Simbol semangat persatuan rakyat dan pemimpin di Yogyakarta.'}
+    ]
+  },
+  bali: {
+    id:'bali', name:'BALI', loc:'WANTILAN PURA BALI',
+    keeper:'BLI MADE', hat:'udeng', outfit:'#8c2d19', scarf:'#f2b705',
+    badge:'Penjaga Sastra Bali', cipher:'DIJAGA',
+    bg:'#f4efe4', path:'#e2d5be',
+    intro:'Om Swastiastu! Lontar Kakawin kuno dicuri! Untuk membuka Peti Sastra di Wantilan, kamu harus mengarahkan 4 Arca Penjaga sesuai konsep arah mata angin Asta Dikpalaka (Kaja, Kelod, Kangin, Kauh)!',
+    obj1:'Putar keempat Pelinggih Arah Angin (Kaja, Kelod, Kangin, Kauh) agar selaras (0/4)',
+    obj2:'Periksa Peti Lontar Kuno di tengah pelataran Wantilan!',
+    objs:[
+      {id:'wantilan', name:'WANTILAN AGUNG', type:'pavilion', x:700, y:280, w:240, h:100, solid:true, desc:'Balai pertemuan adat Bali dengan atap bertingkat dan ukiran khas.'},
+      {id:'peti_bali', name:'PETI LONTAR KAKAWIN', type:'chest', x:700, y:560, w:76, h:50, solid:true, desc:'Peti penyimpanan naskah daun lontar kuno Bali.'},
+      {id:'p_kaja', name:'PELINGGIH UTARA (GUNUNG)', type:'pelinggih', x:700, y:420, w:58, h:58, solid:true, pIdx:0, label:'UTARA (GUNUNG)', target:'KAJA'},
+      {id:'p_kelod', name:'PELINGGIH SELATAN (LAUT)', type:'pelinggih', x:700, y:710, w:58, h:58, solid:true, pIdx:1, label:'SELATAN (LAUT)', target:'KELOD'},
+      {id:'p_kangin', name:'PELINGGIH TIMUR (TERBIT)', type:'pelinggih', x:960, y:560, w:58, h:58, solid:true, pIdx:2, label:'TIMUR (TERBIT)', target:'KANGIN'},
+      {id:'p_kauh', name:'PELINGGIH BARAT (TERBENAM)', type:'pelinggih', x:440, y:560, w:58, h:58, solid:true, pIdx:3, label:'BARAT (TERBENAM)', target:'KAUH'}
+    ]
   }
-  if(d==='left'){g.scale(-1,1);d='right';}
-  const side=d==='right',cy=-42+bob;
-  ink(g,o.lw||2);
-  rr(g,-8,-11-st*2,6,11,2,'#3d3b4e');rr(g,2,-11+st*2,6,11,2,'#3d3b4e');
-  rr(g,-11,-31+bob,22,21,6,o.shirt);
-  if(o.lurik){g.save();g.beginPath();g.roundRect(-11,-31+bob,22,21,6);g.clip();g.strokeStyle='rgba(20,20,40,.45)';g.lineWidth=1.4;for(let i=-9;i<11;i+=4){g.beginPath();g.moveTo(i,-31+bob);g.lineTo(i,-10+bob);g.stroke();}g.restore();ink(g,o.lw||2);}
-  if(side)rr(g,-3+st*3,-29+bob,6,13,3,o.shirt);
-  else{rr(g,-15,-29+bob-st,5,13,2,o.shirt);rr(g,10,-29+bob+st,5,13,2,o.shirt);}
-  rr(g,-9,-34+bob,18,6,3,o.scarf);
-  g.beginPath();g.arc(0,cy,12,0,7);g.fillStyle=o.skin;g.fill();g.stroke();
-  const hc=o.hairc,hs=o.hair;
-  if(d==='up'){
-    if(hs==='hijab')rr(g,-15,cy-14,30,38,14,hc);
-    else{circ(g,0,cy,13,hc);if(hs==='panjang')rr(g,-12,cy,24,24,8,hc);}
-  }else{
-    if(hs==='hijab'){
-      rr(g,-15,cy-14,30,38,14,hc);
-      g.beginPath();g.ellipse(side?3:0,cy+1,side?8:9,10,0,0,7);g.fillStyle=o.skin;g.fill();g.stroke();
-    }else{
-      if(hs==='panjang'){if(side)rr(g,-14,cy-4,12,28,6,hc);else{rr(g,-15,cy-3,8,26,4,hc);rr(g,7,cy-3,8,26,4,hc);}}
-      g.beginPath();g.arc(0,cy,13,Math.PI,0);g.quadraticCurveTo(7,cy-5,0,cy-4);g.quadraticCurveTo(-7,cy-5,-13,cy);g.fillStyle=hc;g.fill();g.stroke();
-    }
-    const e=o.expr||'ramah',ex=side?[5]:[-4.5,4.5],fy=cy+1,mx=side?6:0;
-    g.fillStyle='rgba(230,100,100,.35)';
-    if(side){g.beginPath();g.arc(2,fy+4,2.6,0,7);g.fill();}else{g.beginPath();g.arc(-7.5,fy+4,2.6,0,7);g.arc(7.5,fy+4,2.6,0,7);g.fill();}
-    ink(g,Math.max(1,(o.lw||2)*.8));g.fillStyle='#111';
-    for(const x0 of ex){
-      if(e==='senang'){g.beginPath();g.arc(x0,fy+1.5,2.4,Math.PI*1.1,Math.PI*1.9);g.stroke();}
-      else{g.beginPath();g.arc(x0,fy,1.9,0,7);g.fill();}
-      if(e==='serius'){const s=x0>=0?1:-1;g.beginPath();g.moveTo(x0-3*s,fy-6);g.lineTo(x0+3*s,fy-3.5);g.stroke();}
-    }
-    if(o.stache){g.fillStyle='#f4f4f4';g.beginPath();g.ellipse(mx-2.8,fy+4,3.4,1.7,0.2,0,7);g.ellipse(mx+2.8,fy+4,3.4,1.7,-0.2,0,7);g.fill();g.stroke();}
-    const my=fy+(o.stache?7:5);
-    if(e==='ramah'){g.beginPath();g.arc(mx,my-1,3,.15*Math.PI,.85*Math.PI);g.stroke();}
-    else if(e==='senang'){g.beginPath();g.arc(mx,my-1.5,3.6,0,Math.PI);g.fillStyle='#c0392b';g.fill();g.stroke();}
-    else{g.beginPath();g.moveTo(mx-2.5,my);g.lineTo(mx+2.5,my);g.stroke();}
-    ink(g,o.lw||2);
-  }
-  const ht=o.hat;
-  if(ht==='blangkon'){
-    rr(g,-12.5,cy-16,25,11,5,'#6b4a2b');
-    g.strokeStyle='#d8b27a';g.lineWidth=1.2;g.beginPath();g.moveTo(-7,cy-12);g.lineTo(-3,cy-9);g.moveTo(3,cy-12);g.lineTo(7,cy-9);g.stroke();ink(g,o.lw||2);
-    if(d==='up')circ(g,0,cy-8,4.5,'#6b4a2b');else if(side)circ(g,-12,cy-8,4.5,'#6b4a2b');
-  }else if(ht==='udeng'){
-    rr(g,-13,cy-13,26,8,4,'#efe6cc');
-    poly(g,[[-6,cy-13],[side?-3:0,cy-25],[6,cy-13]],'#efe6cc');
-    g.strokeStyle='#d9a21b';g.lineWidth=2;g.beginPath();g.moveTo(-12,cy-9);g.lineTo(12,cy-9);g.stroke();ink(g,o.lw||2);
-  }else if(ht==='peci'){
-    rr(g,-11,cy-19,22,14,3,'#1c1c1c');
-    g.strokeStyle='#d9a21b';g.lineWidth=1.5;g.beginPath();g.moveTo(-10,cy-7);g.lineTo(10,cy-7);g.stroke();ink(g,o.lw||2);
-  }
-  g.restore();
-}
-
-/* ---------- potret dialog ---------- */
-function paintPortrait(){
-  if(!D.face)return;
-  const p=$('#por'),pg=p.getContext('2d');
-  pg.setTransform(2,0,0,2,0,0);pg.clearRect(0,0,112,112);
-  pg.save();pg.translate(56+boil.x,56+boil.y);pg.rotate(boil.r);pg.translate(-56,-56);
-  pg.strokeStyle='rgba(120,90,50,.28)';pg.lineWidth=1;
-  for(let i=-112;i<112;i+=9){pg.beginPath();pg.moveTo(i+Math.random()*2,0);pg.lineTo(i+112+Math.random()*2,112);pg.stroke();}
-  const o=D.face.w==='m'?Object.assign({},MBAH):Object.assign({},cfg,{noCustom:true});
-  o.expr=D.face.f;o.dir='down';o.t=0;o.lw=1.1;o.moving=false;
-  drawChar(pg,56,170,o,2.6);
-  pg.restore();
-}
-setInterval(()=>{boil.x=(Math.random()-.5)*2.4;boil.y=(Math.random()-.5)*2.4;boil.r=(Math.random()-.5)*.03;if(D.on&&D.face)paintPortrait();},130);
-
-/* ============================================================
-   LATAR STATIS (digambar sekali ke kanvas tersembunyi)
-   ============================================================ */
-const bg=document.createElement('canvas');bg.width=WW;bg.height=WH;
-function buildBG(){
-  const b=bg.getContext('2d');let s=11;const R=()=>(s=(s*16807)%2147483647)/2147483647;
-  b.fillStyle='#f6f3eb';b.fillRect(0,0,WW,WH);
-  b.strokeStyle='rgba(120,90,50,.07)';b.lineWidth=1;
-  for(let i=0;i<1100;i++){const x=R()*WW,y=R()*WH,a=R()*6.28,l=4+R()*10;b.beginPath();b.moveTo(x,y);b.lineTo(x+Math.cos(a)*l,y+Math.sin(a)*l);b.stroke();}
-  for(let i=0;i<30;i++){b.fillStyle='rgba(143,184,120,.17)';b.beginPath();b.ellipse(R()*WW,R()*WH,60+R()*90,35+R()*55,R()*3,0,7);b.fill();}
-  ink(b,1.6);b.strokeStyle='rgba(60,60,50,.5)';
-  b.fillStyle='#ebe1c8';b.beginPath();b.roundRect(540,335,320,140,10);b.fill();b.stroke();
-  b.beginPath();b.roundRect(655,470,90,490,6);b.fill();b.stroke();
-  b.lineWidth=1.2;b.strokeStyle='rgba(60,60,50,.4)';
-  for(let y=345;y<475;y+=28){for(let x=548+((y/28|0)%2)*20;x<860;x+=40){b.beginPath();b.roundRect(x,y,34,22,4);b.stroke();}}
-  for(let y=478;y<955;y+=30){for(let x=660+((y/30|0)%2)*14;x<740;x+=40){b.beginPath();b.roundRect(x,y,34,24,4);b.stroke();}}
-  b.lineWidth=1.3;b.strokeStyle='#4d6a3d';
-  for(let i=0;i<300;i++){const x=R()*WW,y=R()*WH;if(x>530&&x<870&&y<480)continue;if(x>640&&x<760&&y>470)continue;b.beginPath();b.moveTo(x-3,y);b.lineTo(x-4,y-6);b.moveTo(x,y);b.lineTo(x,y-8);b.moveTo(x+3,y);b.lineTo(x+4,y-6);b.stroke();}
-  const FC=['#f4a3b5','#f9d36b','#b7a4e3','#fff'];b.strokeStyle='#111';b.lineWidth=1;
-  for(let i=0;i<80;i++){const x=R()*WW,y=R()*WH;if(x>530&&x<870&&y<480)continue;if(x>640&&x<760&&y>470)continue;b.fillStyle=FC[i%4];b.beginPath();b.arc(x,y,3.2,0,7);b.fill();b.stroke();}
-  // lampu batu di sepanjang jalan
-  ink(b,2);
-  for(const y of [520,650,780])for(const x of [622,778]){b.fillStyle='#bdb7a6';b.beginPath();b.roundRect(x-8,y-6,16,26,3);b.fill();b.stroke();b.fillStyle='#f9d36b';b.beginPath();b.roundRect(x-6,y-24,12,18,3);b.fill();b.stroke();b.beginPath();b.moveTo(x-9,y-24);b.lineTo(x,y-33);b.lineTo(x+9,y-24);b.closePath();b.fillStyle='#bdb7a6';b.fill();b.stroke();}
-  // pohon pembatas
-  const tree=(x,y,r)=>{b.fillStyle='#8a6a48';b.beginPath();b.roundRect(x-5,y-4,10,26,3);b.fill();b.stroke();b.fillStyle='#86b57c';[[0,-18,r],[-r*.6,-6,r*.75],[r*.6,-6,r*.75]].forEach(c=>{b.beginPath();b.arc(x+c[0],y+c[1],c[2],0,7);b.fill();b.stroke();});};
-  for(let x=20;x<WW;x+=62)tree(x,28+R()*10,22+R()*6);
-  for(let x=20;x<WW;x+=62)tree(x,WH-34+R()*10,22+R()*6);
-  for(let y=90;y<WH-60;y+=62){tree(16+R()*8,y,22+R()*5);tree(WW-16-R()*8,y,22+R()*5);}
-}
-
-/* ============================================================
-   OBJEK DUNIA
-   ============================================================ */
-function pendopo(){
-  rr(g,510,285,380,58,4,'#d8cdb4');
-  rr(g,556,214,288,74,2,'#6b4a35');
-  for(const x of [540,640,760,860])rr(g,x-7,196,14,96,2,'#8a5a3b');
-  poly(g,[[470,216],[560,122],[840,122],[930,216]],'#a8482f');
-  g.save();g.strokeStyle='rgba(60,20,10,.55)';g.lineWidth=1.4;for(let i=0;i<9;i++){const k=i/9;g.beginPath();g.moveTo(560-90*k+ (90*k)*0,122+94*k);g.lineTo(840+90*k,122+94*k);g.stroke();}g.restore();ink(g,2.2);
-  poly(g,[[590,124],[645,66],[755,66],[810,124]],'#b95a3a');
-  rr(g,612,226,176,36,4,'#f2e3b8');
-  g.fillStyle='#111';g.font='22px "Patrick Hand",cursive';g.textAlign='center';g.fillText('BALAI KARSALOKA',700,251);
-  rr(g,640,336,120,12,2,'#c9bfa3');
-}
-function pillar(x){
-  rr(g,x,888,56,44,3,'#bdb7a6');rr(g,x+4,852,48,38,3,'#c9c3b2');rr(g,x+8,820,40,34,3,'#bdb7a6');
-  poly(g,[[x+4,820],[x+28,788],[x+52,820]],'#a9a392');
-  g.save();g.strokeStyle='rgba(60,60,50,.5)';g.lineWidth=1.3;for(let i=0;i<3;i++){g.beginPath();g.moveTo(x+12,862+i*12);g.lineTo(x+44,862+i*12);g.stroke();}g.restore();ink(g,2.2);
-}
-function prasasti(){
-  g.beginPath();g.moveTo(200,532);g.lineTo(200,472);g.quadraticCurveTo(230,430,260,472);g.lineTo(260,532);g.closePath();g.fillStyle='#b9b4a6';g.fill();dbl(g);
-  g.save();g.strokeStyle='rgba(40,40,40,.65)';g.lineWidth=1.6;
-  for(let r=0;r<4;r++)for(let c=0;c<3;c++){const x=212+c*16,y=480+r*13;g.beginPath();g.arc(x+3,y+3,3,0,5.2);g.moveTo(x+6,y-2);g.lineTo(x+6,y+8);g.stroke();}
-  g.restore();ink(g,2.2);
-  g.fillStyle='rgba(90,140,80,.7)';g.beginPath();g.ellipse(215,530,14,5,0,0,7);g.fill();
-}
-function meja(){
-  rr(g,1075,530,110,36,3,'#9b6b43');rr(g,1083,566,10,18,2,'#7a4f2f');rr(g,1167,566,10,18,2,'#7a4f2f');
-  const open=stage>=3;
-  rr(g,1105,506,50,26,3,'#7a4a28');
-  if(open){poly(g,[[1103,506],[1157,506],[1150,480],[1110,480]],'#8c5a33');rr(g,1112,494,36,11,5,'#f2e3b8');}
-  else{rr(g,1103,492,54,16,6,'#8c5a33');circ(g,1130,508,4.5,'#f2c14e');g.beginPath();g.moveTo(1130,513);g.lineTo(1130,520);g.stroke();}
-}
-function trunk(){
-  rr(g,260,215,40,66,10,'#7a5a3a');
-  g.save();g.strokeStyle='#5a3f26';g.lineWidth=2;for(const x of [252,266,294,308]){g.beginPath();g.moveTo(x,235);g.quadraticCurveTo(x+(x<280?-4:4),260,x+(x<280?-10:10),282);g.stroke();}g.restore();ink(g,2.2);
-}
-function canopy(){
-  g.save();g.globalAlpha=.92;
-  [[280,150,72],[222,176,56],[338,176,56],[280,110,54],[236,128,48],[326,128,48]].forEach(c=>circ(g,c[0],c[1],c[2],'#80b077'));
-  g.globalAlpha=1;g.strokeStyle='rgba(40,80,40,.5)';g.lineWidth=1.4;
-  for(let i=0;i<26;i++){const a=i*2.4,r=20+(i*7)%54;g.beginPath();g.moveTo(280+Math.cos(a)*r,150+Math.sin(a)*r*.8);g.lineTo(280+Math.cos(a)*r+6,150+Math.sin(a)*r*.8+4);g.stroke();}
-  g.restore();ink(g,2.2);
-}
-
-/* ============================================================
-   UPDATE & RENDER
-   ============================================================ */
-function update(dt){
-  P.t+=dt;
-  let vx=0,vy=0;
-  if(keys.ArrowLeft||keys.KeyA)vx--;if(keys.ArrowRight||keys.KeyD)vx++;
-  if(keys.ArrowUp||keys.KeyW)vy--;if(keys.ArrowDown||keys.KeyS)vy++;
-  let an=0;
-  if(!vx&&!vy&&AN.m>0){vx=AN.x;vy=AN.y;an=AN.m;}
-  if(vx||vy)target=null;
-  else if(target){
-    const dx=target.x-P.x,dy=target.y-P.y,d=Math.hypot(dx,dy);
-    if(target.obj&&Math.hypot(P.x-target.obj.x,P.y-target.obj.y)<target.obj.r*.8){const id=target.obj.id;target=null;P.moving=false;interact(id);return;}
-    if(d<5)target=null;else{vx=dx/d;vy=dy/d;}
-  }
-  const run=keys.ShiftLeft||keys.ShiftRight;let sp=run?210:120;if(an)sp=an>.85?200:40+80*(an/.85);
-  const L=Math.hypot(vx,vy);let mv=0;
-  if(L){
-    vx/=L;vy/=L;
-    const nx=P.x+vx*sp*dt,ny=P.y+vy*sp*dt;
-    if(!blocked(nx,P.y)){mv+=Math.abs(nx-P.x);P.x=nx;}
-    if(!blocked(P.x,ny)){mv+=Math.abs(ny-P.y);P.y=ny;}
-    P.dir=Math.abs(vx)>Math.abs(vy)?(vx<0?'left':'right'):(vy<0?'up':'down');
-  }
-  P.moving=mv>.01;
-  if(target){stuck=P.moving?0:stuck+dt;if(stuck>.35){target=null;stuck=0;}}
-}
-
-function render(dt){
-  const vw=W/Z,vh=H/Z;
-  const tx=Math.max(0,Math.min(WW-vw,P.x-vw/2)),ty=Math.max(0,Math.min(WH-vh,P.y-vh/2-20));
-  if(cam.s){cam.x=tx;cam.y=ty;cam.s=0;}else{const k=Math.min(1,dt*6);cam.x+=(tx-cam.x)*k;cam.y+=(ty-cam.y)*k;}
-  g.setTransform(DPR,0,0,DPR,0,0);g.fillStyle='#f6f3eb';g.fillRect(0,0,W,H);
-  g.setTransform(DPR*Z,0,0,DPR*Z,-cam.x*DPR*Z,-cam.y*DPR*Z);
-  g.drawImage(bg,0,0);ink(g,2.2);g.textAlign='center';
-  MBAH.t=t;
-  Object.assign(PL,cfg,{dir:P.dir,moving:P.moving,t:P.t,expr:'ramah'});
-  const E=[[385,()=>drawChar(g,700,385,MBAH)],[335,pendopo],[930,()=>pillar(604)],[930,()=>pillar(740)],[530,prasasti],[566,meja],[280,trunk],[P.y,()=>drawChar(g,P.x,P.y,PL)]];
-  E.sort((a,b)=>a[0]-b[0]);E.forEach(e=>e[1]());
-  canopy();
-  const tg={1:'prasasti',2:'meja',3:'mbah'}[stage];
-  if(tg){const m=OID[tg].mk;g.save();g.strokeStyle='#d62d2d';g.lineWidth=3;g.setLineDash([9,7]);g.lineDashOffset=-t*18;g.beginPath();g.ellipse(m[0],m[1],m[2],m[3],0,0,7);g.stroke();g.restore();}
-  if(ping){ping.a-=dt*2;if(ping.a<=0)ping=null;else{g.save();g.strokeStyle='#d62d2d';g.globalAlpha=ping.a;g.lineWidth=2.5;g.beginPath();g.arc(ping.x,ping.y,26*(1-ping.a)+6,0,7);g.stroke();g.restore();}}
-  const n=mode==='play'?near():null;
-  if(n){
-    const y=n.by+Math.sin(t*7)*3;
-    g.fillStyle='#fff';g.strokeStyle='#111';g.lineWidth=2.5;
-    g.beginPath();g.arc(n.bx,y,13,0,7);g.fill();g.stroke();
-    g.beginPath();g.moveTo(n.bx-5,y+11);g.lineTo(n.bx,y+20);g.lineTo(n.bx+5,y+11);g.fillStyle='#fff';g.fill();g.stroke();
-    g.beginPath();g.arc(n.bx,y,11,0.9,2.2);g.fillStyle='#fff';g.strokeStyle='#fff';g.stroke();
-    g.fillStyle='#d62d2d';g.font='bold 22px "Patrick Hand",cursive';g.fillText('!',n.bx,y+7);
-    ink(g,2.2);
-  }
-}
-
-function drawPreview(){
-  const p=$('#pv'),q=p.getContext('2d');
-  q.setTransform(2,0,0,2,0,0);q.clearRect(0,0,240,280);
-  q.save();q.translate(boil.x,boil.y);q.rotate(boil.r);
-  q.strokeStyle='rgba(120,90,50,.2)';q.lineWidth=1;
-  for(let i=-280;i<240;i+=14){q.beginPath();q.moveTo(i,0);q.lineTo(i+280,280);q.stroke();}
-  const dirs=['down','right','up','left'];
-  const o=Object.assign(PL,cfg,{dir:dirs[Math.floor(t/1.4)%4],moving:false,t:t,expr:'ramah',noCustom:false});
-  drawChar(q,120,242,o,3.4);
-  q.restore();
-}
-
-/* ============================================================
-   DIALOG (efek ketik, potret, pilihan)
-   ============================================================ */
-const D={on:false,L:[],i:0,p:0,n:-1,full:'',cb:null,sel:0,ch:null,done:false,face:null};
-function say(L,cb){D.L=L;D.i=0;D.cb=cb||null;D.on=true;target=null;P.moving=false;M('dialog');$('#dlg').classList.remove('hide');setLine();}
-function setLine(){
-  const l=D.L[D.i];
-  D.full=l.t.replace(/\{n\}/g,cfg.name);D.p=0;D.n=-1;D.done=false;D.sel=0;D.ch=l.ch||null;
-  const who=l.w==='m'?'Mbah Loka':l.w==='p'?cfg.name:'';
-  $('#nm').textContent=who;$('#nm').classList.toggle('hide',!who);$('#por').classList.toggle('hide',!who);
-  D.face=l.w?{w:l.w,f:l.f||'ramah'}:null;paintPortrait();
-  $('#ch').innerHTML='';$('#nx').style.visibility='hidden';$('#tx').textContent='';
-}
-function typeUpdate(dt){
-  if(!D.on||D.done)return;
-  D.p+=dt*42;const n=Math.min(D.full.length,D.p|0);
-  if(n!==D.n){D.n=n;if(n%2===0&&D.face)blip(D.face.w==='m'?300:480);$('#tx').textContent=D.full.slice(0,n);}
-  if(n>=D.full.length){D.done=true;endLine();}
-}
-function endLine(){
-  if(D.ch){
-    const c=$('#ch');c.innerHTML='';
-    D.ch.forEach((x,i)=>{const b=document.createElement('button');b.className='btn'+(i===D.sel?' sel':'');b.textContent=x.l;b.onpointerdown=ev=>ev.stopPropagation();b.onclick=ev=>{ev.stopPropagation();choose(i);};b.onpointerenter=()=>{D.sel=i;refSel();};c.appendChild(b);});
-  }else $('#nx').style.visibility='visible';
-}
-function refSel(){[...$('#ch').children].forEach((b,i)=>b.classList.toggle('sel',i===D.sel));}
-function selCh(d){D.sel=(D.sel+d+D.ch.length)%D.ch.length;refSel();}
-function choose(i){const c=D.ch[i];D.cb=null;closeD();c.fn();}
-function closeD(){D.on=false;D.ch=null;D.face=null;$('#dlg').classList.add('hide');M('play');}
-function adv(){
-  if(!D.on)return;
-  if(!D.done){D.p=1e9;return;}
-  if(D.ch)return;
-  D.i++;
-  if(D.i>=D.L.length){const c=D.cb;D.cb=null;closeD();if(c)c();}else setLine();
-}
-$('#dlg').addEventListener('pointerdown',()=>{ensureAudio();adv();});
-
-/* ============================================================
-   MISI & HUD
-   ============================================================ */
-const OB=['Bicaralah dengan Mbah Loka di depan pendopo.','Periksa Batu Prasasti Kuno (sisi barat).','Buka peti di Meja Arsip Pusaka (sisi timur).','Lapor ke Mbah Loka.','Kasus #01 selesai! Jelajahi balai dengan bebas.'];
-function setHud(){$('#obj').textContent='▸ '+((stage===0&&free)?'Free Roam: periksa semua objek budaya. Bicara dengan Mbah Loka bila ingin memulai misi.':OB[stage]);}
-
-function talkMbah(){
-  if(stage===0){
-    say([
-      {w:'m',f:'senang',t:'Selamat datang di game KarsaLoka!'},
-      {w:'m',f:'ramah',t:'Sugeng rawuh, {n}. Aku Mbah Loka, juru kunci Balai KarsaLoka. Mau mulai penyelidikan, atau berkeliling dulu?',ch:[
-        {l:'Start Game (Misi #01)',fn:()=>{stage=1;free=false;setHud();say([
-          {w:'m',f:'serius',t:'Kasus #01: Misteri Resep Wedang Uwuh Keraton. Resep aslinya raib dari arsip balai ini, {n}!'},
-          {w:'m',f:'ramah',t:'Ceritanya begini. Dulu balai ini dijaga juru arsip bernama Eyang Wiryo. Beliau yang meracik Wedang Uwuh paling harum se-Imogiri.'},
-          {w:'m',f:'ramah',t:'Menjelang pensiun, Eyang takut resep aslinya jatuh ke tangan sembarang orang. Maka resep itu digulung dan disembunyikan, lalu petunjuknya diukir di batu dengan bahasa Jawa.'},
-          {w:'m',f:'serius',t:'Aku masih ingat pesan beliau: "Kalau kelak resepku hilang, carilah gulungan di meja sebelah timur. Cuma itu, jangan tanya yang lain."'},
-          {w:'m',f:'serius',t:'Sayang, aku tak pandai membaca ukiran Jawa itu. Periksalah Batu Prasasti Kuno di sisi barat halaman, siapa tahu ada kaitannya dengan pesan Eyang.'},
-          {w:'p',f:'senang',t:'Siap, Mbah! Penyelidikan dimulai.'}]);}},
-        {l:'Free Roam',fn:()=>{free=true;setHud();say([
-          {w:'m',f:'senang',t:'Silakan berkeliling dan periksa semua objek budaya di balai ini.'},
-          {w:'m',f:'ramah',t:'Ingin berganti penampilan? Tekan tombol Avatar di pojok kiri atas. Bicaralah lagi padaku bila siap menyelidiki.'}]);}}
-      ]}
-    ]);
-  }else if(stage===1)say([{w:'m',f:'serius',t:'Sandi di Batu Prasasti belum terpecahkan, {n}. Ingat pesan Eyang Wiryo: carilah gulungan di meja sebelah timur. Cocokkan dengan ukiran di batu sisi barat itu.'}]);
-  else if(stage===2)say([{w:'m',f:'serius',t:'Prasasti sudah bicara. Kini temukan Meja Arsip Pusaka di sisi timur. Petinya terkunci oleh pertanyaan budaya.'}]);
-  else if(stage===3)say([
-    {w:'m',f:'senang',t:'Gulungan itu... kau menemukannya, {n}!'},
-    {w:'p',f:'ramah',t:'Isinya resep asli Wedang Uwuh Keraton, Mbah: jahe, serai, kayu manis, cengkih, pala, kayu secang, dan gula batu.'},
-    {w:'m',f:'senang',t:'Tepat sekali! Kasus ini kututup. Kau layak menerima lencana budaya.'}
-  ],()=>{stage=4;setHud();victory();});
-  else say([{w:'m',f:'senang',t:'Terima kasih, Detektif {n}. Balai KarsaLoka aman berkat kejelianmu. Silakan berkeliling sepuasnya!'}]);
-}
-
-function interact(id){
-  if(id==='mbah')return talkMbah();
-  if(id==='prasasti'){
-    const L=[{w:'',t:'Batu tua penuh ukiran. Tertulis dalam bahasa Jawa:\n"Golekana gulungan ana ing meja sisih wetan"'}];
-    if(stage===1){L.push({w:'p',f:'serius',t:'Ini sandi! Aku harus menerjemahkannya ke Bahasa Indonesia.'});return say(L,puzzle);}
-    if(stage===0)L.push({w:'p',f:'ramah',t:'Sepertinya sandi penting. Mungkin Mbah Loka tahu soal ini.'});
-    else L.push({w:'',t:'Terjemahan: "Carilah gulungan di meja sebelah timur." Sandinya sudah terpecahkan.'});
-    return say(L);
-  }
-  if(id==='meja'){
-    if(stage===2)return say([{w:'',t:'Peti pusaka di atas meja terkunci. Gemboknya hanya terbuka oleh pengetahuan tentang Wedang Uwuh.'}],quiz);
-    if(stage>=3)return say([{w:'',t:'Peti arsip sudah terbuka dan kosong. Isinya telah kau amankan.'}]);
-    return say([{w:'',t:'Meja arsip dengan peti terkunci rapat.'},{w:'p',f:'serius',t:stage===1?'Mungkin sandi di prasasti memberi petunjuk soal meja ini.':'Aku belum tahu cara membukanya.'}]);
-  }
-  if(id==='beringin')return say([{w:'',t:'Pohon beringin tua. Dalam budaya Jawa, beringin melambangkan pengayoman. Sepasang beringin juga berdiri di Alun-Alun keraton Yogyakarta.'}]);
-  if(id==='gapura')return say([{w:'',t:'Gapura KarsaLoka bergaya candi bentar, gerbang yang seolah terbelah dua. Gaya ini lazim pada arsitektur Jawa dan Bali.'}]);
-  if(id==='pendopo')return say([{w:'',t:'Pendopo adalah bangunan terbuka tanpa dinding, beratap joglo, tempat warga berkumpul dan menerima tamu.'}]);
-}
-
-/* ---------- modal ---------- */
-function modal(html){const m=$('#modal');m.innerHTML='<div class="box" id="mb">'+html+'</div>';m.classList.remove('hide');M('modal');}
-function closeM(){$('#modal').classList.add('hide');M('play');}
-
-/* Tahap 1: susun kata */
-function puzzle(){
-  const ans=[],bank=shuffle(['Carilah','gulungan','di','meja','sebelah','timur','barat','pohon','sebuah','dua','itu'].map((w,i)=>({w,id:i})));
-  const r=()=>{
-    modal('<h2>Batu Prasasti Kuno</h2><div class="jv">"Golekana gulungan ana ing meja sisih wetan"</div><div>Susun terjemahannya dalam Bahasa Indonesia:</div>'+
-      '<div class="zone">'+ans.map(b=>'<button class="btn blk" data-a="'+b.id+'">'+b.w+'</button>').join('')+'</div>'+
-      '<div>'+bank.map(b=>'<button class="btn blk" data-b="'+b.id+'">'+b.w+'</button>').join('')+'</div>'+
-      '<p id="fb" style="min-height:28px;margin:8px 0"></p><button class="btn" id="ck">Periksa</button> <button class="btn" id="cl">Tutup</button>');
-    const el=$('#mb');
-    el.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>{const i=ans.findIndex(x=>x.id==b.dataset.a);bank.push(...ans.splice(i,1));r();});
-    el.querySelectorAll('[data-b]').forEach(b=>b.onclick=()=>{const i=bank.findIndex(x=>x.id==b.dataset.b);ans.push(...bank.splice(i,1));r();});
-    $('#cl').onclick=closeM;
-    $('#ck').onclick=()=>{
-      const s=ans.map(x=>x.w).join(' '),f=$('#fb');
-      if(s==='Carilah gulungan di meja sebelah timur'){f.textContent='✔ Benar! Sandi terpecahkan.';f.style.color='#1b7a2b';setTimeout(()=>{closeM();solved1();},900);}
-      else{f.textContent=ans.length?'✘ Belum tepat, coba susun ulang.':'Klik blok kata untuk menyusun kalimat.';f.style.color='#c0392b';el.classList.remove('shake');void el.offsetWidth;el.classList.add('shake');}
-    };
-  };
-  r();
-}
-function solved1(){stage=2;setHud();say([{w:'',t:'Terjemahan: "Carilah gulungan di meja sebelah timur."'},{w:'p',f:'senang',t:'Meja arsip! Letaknya di sisi timur halaman.'}]);}
-
-/* Tahap 2: kuis wedang uwuh (opsi pertama = benar) */
-function quiz(){
-  const Q=[
-    ['Wedang uwuh berasal dari daerah mana?',['Imogiri, Bantul, Yogyakarta','Kudus, Jawa Tengah','Ubud, Bali','Padang, Sumatra Barat']],
-    ['Dalam bahasa Jawa, kata "uwuh" berarti...',['Sampah','Manis','Hangat','Rempah']],
-    ['Rempah apa yang memberi warna merah pada wedang uwuh?',['Kayu secang','Kunyit','Daun pandan','Kayu manis']],
-    ['Mana yang BUKAN bahan wedang uwuh?',['Kopi bubuk','Jahe','Cengkih','Serai']]
-  ].map(q=>({q:q[0],o:shuffle(q[1].map((x,i)=>({t:x,ok:i===0})))}));
-  let qi=0;
-  const r=(msg,bad)=>{
-    const q=Q[qi];
-    modal('<h2>Peti Arsip Pusaka</h2><div>Gembok '+(qi+1)+' dari '+Q.length+'</div><p style="margin:10px 0"><b>'+q.q+'</b></p>'+
-      q.o.map((x,i)=>'<button class="btn opt" data-i="'+i+'">'+x.t+'</button>').join('')+
-      '<p style="min-height:28px;margin:8px 0;color:'+(bad?'#c0392b':'#1b7a2b')+'">'+(msg||'')+'</p><button class="btn" id="cl">Tutup</button>');
-    const el=$('#mb');if(bad)el.classList.add('shake');
-    el.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
-      if(q.o[b.dataset.i].ok){qi++;if(qi>=Q.length){closeM();solved2();}else r('✔ Gembok terbuka! Lanjut ke gembok berikutnya.',false);}
-      else r('✘ Salah! Peti bergetar. Coba lagi.',true);
-    });
-    $('#cl').onclick=closeM;
-  };
-  r('',false);
-}
-function solved2(){stage=3;setHud();say([{w:'',t:'Klik! Gembok terakhir terbuka. Di dalam peti ada gulungan tua berisi resep asli Wedang Uwuh Keraton.'},{w:'p',f:'senang',t:'Resepnya utuh! Saatnya lapor ke Mbah Loka.'}]);}
-
-/* Tahap 3: layar kemenangan */
-function victory(){
-  modal('<div style="text-align:center"><h2>KASUS #01 TERPECAHKAN!</h2><canvas id="bd" width="440" height="440" style="width:220px;height:220px"></canvas>'+
-    '<div style="font-size:26px"><b>Lencana Budaya:</b><br>"Detektif Aksara Mataram"</div>'+
-    '<p style="margin:8px 0">Diberikan kepada <b>'+cfg.name.replace(/[<>&]/g,'')+'</b> atas keberhasilan memecahkan Misteri Resep Wedang Uwuh Keraton.</p>'+
-    '<button class="btn" id="fr">Lanjut Free Roam</button></div>');
-  const b=$('#bd').getContext('2d');b.setTransform(2,0,0,2,0,0);ink(b,3);
-  b.translate(110,110);
-  b.fillStyle='#f2c14e';b.beginPath();b.arc(0,0,98,0,7);b.fill();b.stroke();
-  b.fillStyle='#fff7da';b.beginPath();b.arc(0,0,82,0,7);b.fill();b.stroke();
-  b.save();b.setLineDash([6,6]);b.lineWidth=2;b.beginPath();b.arc(0,0,72,0,7);b.stroke();b.restore();
-  b.fillStyle='#d9534f';b.beginPath();for(let i=0;i<10;i++){const a=-Math.PI/2+i*Math.PI/5,r=i%2?16:38;b.lineTo(Math.cos(a)*r,-26+Math.sin(a)*r);}b.closePath();b.fill();b.stroke();
-  b.fillStyle='#111';b.textAlign='center';b.font='24px "Patrick Hand",cursive';b.fillText('DETEKTIF',0,38);b.font='19px "Patrick Hand",cursive';b.fillText('AKSARA MATARAM',0,62);
-  $('#fr').onclick=()=>{free=true;closeM();};
-}
-
-/* ============================================================
-   KARTU DETEKTIF (kustomisasi)
-   ============================================================ */
-const GR=[['Gaya Rambut / Hijab','hair',[['Pendek','pendek'],['Panjang','panjang'],['Hijab','hijab']]],['Penutup Kepala Nusantara','hat',[['Tanpa','none'],['Blangkon','blangkon'],['Udeng Bali','udeng'],['Peci','peci']]]];
-const SW=[['Warna Baju','shirt',['#d9534f','#4a90a4','#e8b04a','#6aa56a','#8e6bb0','#f2f2f2']],['Warna Syal','scarf',['#f2c14e','#d9534f','#2f6fb0','#6aa56a','#111111','#ffffff']],['Warna Kulit','skin',['#ffe0c4','#f1c27d','#d9a066','#b9794a','#8d5a36']],['Warna Rambut / Hijab','hairc',['#1b1b1b','#4a2e1b','#8a5a2b','#6b6b6b','#d8c18a','#c0392b','#2f6fb0','#e8b4c8']]];
-function buildUI(){
-  let h='';
-  GR.forEach(([l,k,o])=>{h+='<div class="gr"><b>'+l+'</b><div>'+o.map(([n,v])=>'<button class="btn sm'+(cfg[k]===v?' on':'')+'" data-k="'+k+'" data-v="'+v+'">'+n+'</button>').join('')+'</div></div>';});
-  SW.forEach(([l,k,o])=>{h+='<div class="gr"><b>'+l+'</b><div>'+o.map(c=>'<button class="sw'+(cfg[k]===c?' on':'')+'" data-k="'+k+'" data-v="'+c+'" style="background:'+c+'"></button>').join('')+'</div></div>';});
-  $('#opts').innerHTML=h;
-  $('#opts').querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>{cfg[b.dataset.k]=b.dataset.v;buildUI();});
-}
-function openCreator(isFirst){
-  first=isFirst;M('create');$('#card').classList.remove('hide');$('#hud').classList.add('hide');
-  $('#go').textContent=isFirst?'Mulai Petualangan':'Simpan Avatar';
-  $('#nama').value=cfg.name==='Detektif'&&isFirst?'':cfg.name;buildUI();
-}
-$('#go').onclick=()=>{
-  ensureAudio();
-  cfg.name=($('#nama').value.trim()||'Detektif').slice(0,14);
-  $('#card').classList.add('hide');$('#hud').classList.remove('hide');M('play');setHud();
-  if(first){P.x=700;P.y=800;P.dir='up';cam.s=1;first=false;setTimeout(()=>{if(mode==='play')talkMbah();},500);}
 };
-$('#ed').onclick=()=>{if(mode==='play')openCreator(false);};
 
-/* ============================================================
-   INPUT
-   ============================================================ */
-addEventListener('keydown',e=>{
-  if(mode==='create')return;
-  const c=e.code;
-  if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(c))e.preventDefault();
-  keys[c]=true;
-  if(e.repeat)return;
-  ensureAudio();
-  const act=c==='Enter'||c==='Space'||c==='KeyZ';
-  if(mode==='dialog'){
-    if(D.ch&&D.done){
-      if(c==='ArrowUp'||c==='ArrowLeft'||c==='KeyW'||c==='KeyA')selCh(-1);
-      else if(c==='ArrowDown'||c==='ArrowRight'||c==='KeyS'||c==='KeyD')selCh(1);
-      else if(act)choose(D.sel);
-    }else if(act)adv();
+/* =========================================================
+   STATE & PENYIMPANAN LOKAL (LOCALSTORAGE)
+========================================================= */
+let S = {
+  name: localStorage.getItem('kl_name') || 'KARSA',
+  done: JSON.parse(localStorage.getItem('kl_done') || '[]'),
+  cur: null,
+  stage: 0, // 0: belum bicara penjaga, 1: tahap 1, 2: tahap 2, 3: lapor penjaga
+  scraps: [false,false,false,false],
+  witnesses: [false,false,false],
+  pelinggih: [0,0,0,0] // index pilihan ['KAJA','KELOD','KANGIN','KAUH']
+};
+function saveS(){
+  localStorage.setItem('kl_name', S.name);
+  localStorage.setItem('kl_done', JSON.stringify(S.done));
+  document.getElementById('badge-cnt').textContent = S.done.length;
+}
+saveS();
+
+/* =========================================================
+   NAVIGASI LAYAR & PETA NUSANTARA
+========================================================= */
+function showOv(id){
+  ['scr-menu','scr-card','scr-prolog','scr-map'].forEach(x=>{
+    document.getElementById(x).style.display = (x===id) ? 'flex' : 'none';
+  });
+  document.getElementById('hud').style.display = id ? 'none' : 'flex';
+  document.getElementById('dlg').style.display = 'none';
+  const tu = document.getElementById('touch-ui');
+  if(id) tu.classList.remove('active'); else tu.classList.add('active');
+}
+function openCard(){ sfx('click'); document.getElementById('inp-name').value = S.name; showOv('scr-card'); }
+function startProlog(){
+  sfx('click');
+  S.name = (document.getElementById('inp-name').value.trim().toUpperCase() || 'KARSA');
+  saveS();
+  document.getElementById('prolog-name').textContent = S.name;
+  showOv('scr-prolog');
+}
+function openMap(){
+  sfx('click');
+  showOv('scr-map');
+  renderMapPins();
+  const order = ['sumbar','jabar','jogja','bali'];
+  const ciph = order.map(k => S.done.includes(k) ? REG[k].cipher : '░░░░░░').join(' ');
+  document.getElementById('ciph-cnt').textContent = S.done.length;
+  document.getElementById('ciph-txt').textContent = `"${ciph}"`;
+  document.getElementById('btn-epilog').style.display = (S.done.length === 4) ? 'inline-block' : 'none';
+}
+
+/* Koordinat pin merah disesuaikan pas ke posisi pulau di karsaloka-map.jpg */
+const MAP_PINS = [
+  { id: 'sumbar', name: 'Sumatera Barat', x: 24.5, y: 48.0, active: true },
+  { id: 'jabar',  name: 'Jawa Barat',     x: 33.8, y: 69.5, active: true },
+  { id: 'jogja',  name: 'Yogyakarta',     x: 39.8, y: 73.0, active: true },
+  { id: 'bali',   name: 'Bali',           x: 47.2, y: 75.0, active: true },
+  { id: 'kalimantan', name: 'Kalimantan', x: 44.5, y: 44.5, active: false },
+  { id: 'sulawesi',   name: 'Sulawesi',   x: 56.5, y: 47.0, active: false },
+  { id: 'papua',      name: 'Papua',      x: 78.5, y: 56.0, active: false }
+];
+
+function pinSVG(type) {
+  if (type === 'done') {
+    return `<svg viewBox="0 0 36 48" width="28" height="38" style="display:block;filter:drop-shadow(1px 2px 1px rgba(0,0,0,0.45));">
+      <line x1="18" y1="26" x2="18" y2="46" stroke="#222" stroke-width="2.6" stroke-linecap="round"/>
+      <circle cx="18" cy="16" r="12" fill="#2e9e5b" stroke="#111" stroke-width="2.4"/>
+      <ellipse cx="14" cy="11" rx="3.5" ry="2.2" fill="#8ce0ad" transform="rotate(-25 14 11)"/>
+      <path d="M12.5 16.5 L16.2 20 L23.5 12.5" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>`;
+  }
+  if (type === 'soon') {
+    return `<svg viewBox="0 0 36 48" width="25" height="34" style="display:block;filter:drop-shadow(1px 2px 1px rgba(0,0,0,0.4));opacity:0.88;">
+      <line x1="18" y1="26" x2="18" y2="46" stroke="#333" stroke-width="2.4" stroke-linecap="round"/>
+      <circle cx="18" cy="16" r="11" fill="#8e949e" stroke="#111" stroke-width="2.2"/>
+      <circle cx="14" cy="12" r="2.5" fill="#cfd4dc"/>
+    </svg>`;
+  }
+  return `<svg viewBox="0 0 36 48" width="28" height="38" style="display:block;filter:drop-shadow(1px 2px 1px rgba(0,0,0,0.45));">
+    <line x1="18" y1="26" x2="18" y2="46" stroke="#222" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="18" cy="16" r="12" fill="#e03a26" stroke="#111" stroke-width="2.4"/>
+    <ellipse cx="14" cy="11" rx="3.5" ry="2.2" fill="#ff8f80" transform="rotate(-25 14 11)"/>
+  </svg>`;
+}
+
+function renderMapPins() {
+  const layer = document.getElementById('map-pins-layer');
+  layer.innerHTML = '';
+
+  MAP_PINS.forEach((p, idx) => {
+    const done = p.active && S.done.includes(p.id);
+    const pinType = !p.active ? 'soon' : (done ? 'done' : 'active');
+
+    const btn = document.createElement('button');
+    btn.className = 'map-pin-btn' + (p.active ? '' : ' locked');
+    btn.style.left = p.x + '%';
+    btn.style.top = p.y + '%';
+    btn.style.animationDelay = (idx * 0.18) + 's';
+    btn.setAttribute('aria-label', p.name);
+
+    const labelText = !p.active
+      ? `${p.name} (Segera Hadir)`
+      : (done ? `✔ ${p.name} (Selesai)` : `Selidiki ${p.name}`);
+
+    btn.innerHTML = `
+      <span class="pin-label-box">${labelText}</span>
+      ${pinSVG(pinType)}
+    `;
+
+    btn.onclick = () => {
+      sfx('click');
+      if (p.active) enterRegion(p.id);
+      else showMapToast(`Wilayah ${p.name} masih dalam penyelidikan tim pusat (Segera Hadir).`);
+    };
+
+    layer.appendChild(btn);
+  });
+}
+
+let toastTimer = null;
+function showMapToast(msg){
+  const el = document.getElementById('map-toast');
+  el.textContent = msg;
+  el.style.display = 'block';
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>{ el.style.display = 'none'; }, 2800);
+}
+
+/* =========================================================
+   MASUK KE WILAYAH & GAMEPLAY RPG
+========================================================= */
+const gc = document.getElementById('gc'), ctx = gc.getContext('2d');
+const pc = document.getElementById('pc'), pCtx = pc.getContext('2d');
+const W = 1400, H = 960;
+const P = { x:700, y:610, dir:'up', mov:false, cyc:0, tx:null, ty:null };
+const KEEPER = { x:700, y:470 };
+
+function resize(){
+  const w = document.getElementById('wrap');
+  gc.width = w.clientWidth; gc.height = w.clientHeight;
+}
+window.addEventListener('resize', resize); resize();
+
+function enterRegion(id){
+  S.cur = REG[id];
+  S.stage = 0;
+  S.scraps = [false,false,false,false];
+  S.witnesses = [false,false,false];
+  S.pelinggih = [0,0,0,0];
+  P.x = 700; P.y = 620; P.dir = 'up'; P.tx = null; P.ty = null;
+  showOv(null);
+  document.getElementById('hud-loc').textContent = S.cur.loc;
+  updateObjHUD();
+  openDialog(S.cur.keeper, S.cur.intro, true, ()=>{
+    S.stage = 1;
+    updateObjHUD();
+  });
+}
+
+function updateObjHUD(){
+  if(!S.cur) return;
+  const b = document.getElementById('hud-badge');
+  const o = document.getElementById('hud-obj');
+  if(S.stage === 0){ b.textContent='SAMBUTAN'; o.textContent=`Bicara dengan ${S.cur.keeper}`; }
+  else if(S.stage === 1){
+    b.textContent='TAHAP 1/2'; b.className='tag red';
+    if(S.cur.id==='sumbar') o.textContent=`Kumpulkan serpihan naskah (${S.scraps.filter(Boolean).length}/4)`;
+    else if(S.cur.id==='jabar') o.textContent=`Wawancarai 3 saksi warga (${S.witnesses.filter(Boolean).length}/3)`;
+    else if(S.cur.id==='bali') o.textContent=`Selaraskan 4 Pelinggih Arah Angin (${countBaliOk()}/4)`;
+    else o.textContent=S.cur.obj1;
+  } else if(S.stage === 2){
+    b.textContent='TAHAP 2/2'; b.className='tag red';
+    o.textContent=S.cur.obj2;
+  } else if(S.stage === 3){
+    b.textContent='LAPOR'; b.className='tag';
+    o.textContent=`Kembali lapor hasil temuan ke ${S.cur.keeper}!`;
+  } else {
+    b.textContent='SELESAI ✔'; b.className='tag';
+    o.textContent='Kasus wilayah ini selesai! Buka Peta Nusantara untuk wilayah lain.';
+  }
+}
+
+/* =========================================================
+   DIALOG SYSTEM
+========================================================= */
+let dlgFull='', dlgIdx=0, dlgTimer=null, dlgCb=null, dlgMode=false;
+function openDialog(spk, txt, port, cb=null){
+  dlgMode = true; dlgFull = txt; dlgIdx = 0; dlgCb = cb;
+  document.getElementById('dlg').style.display = 'flex';
+  document.getElementById('dlg-spk').textContent = spk;
+  document.getElementById('dlg-port-wrap').style.display = port ? 'block' : 'none';
+  document.getElementById('dlg-txt').textContent = '';
+  document.getElementById('dlg-hint').textContent = '[Spasi / Klik untuk mempercepat]';
+  if(port) drawKeeperPortrait();
+  clearInterval(dlgTimer);
+  dlgTimer = setInterval(()=>{
+    if(dlgIdx < dlgFull.length){
+      dlgIdx++;
+      document.getElementById('dlg-txt').textContent = dlgFull.slice(0, dlgIdx);
+      if(dlgIdx%3===0) beep(360,0.03,'sine',0.04);
+    } else {
+      clearInterval(dlgTimer);
+      document.getElementById('dlg-hint').textContent = '[Spasi / Klik untuk lanjut ▼]';
+    }
+  }, 22);
+}
+function advDialog(){
+  if(!dlgMode) return;
+  if(dlgIdx < dlgFull.length){
+    clearInterval(dlgTimer); dlgIdx = dlgFull.length;
+    document.getElementById('dlg-txt').textContent = dlgFull;
+    document.getElementById('dlg-hint').textContent = '[Spasi / Klik untuk lanjut ▼]';
+  } else {
+    dlgMode = false;
+    document.getElementById('dlg').style.display = 'none';
+    const fn = dlgCb; dlgCb = null;
+    if(fn) fn();
+  }
+}
+
+/* =========================================================
+   INTERAKSI OBJEK & PENJAGA LOKA TIAP DAERAH
+========================================================= */
+function nearby(){
+  if(!S.cur) return null;
+  if(Math.hypot(P.x-KEEPER.x, P.y-KEEPER.y) < 82) return {t:'keeper', d:KEEPER};
+  for(const o of S.cur.objs){
+    if(o.type==='scrap' && S.scraps[o.scrapIdx]) continue;
+    if(Math.hypot(P.x-o.x, P.y-o.y) < Math.max(o.w,o.h)*0.65 + 48) return {t:'obj', d:o};
+  }
+  return null;
+}
+
+function interact(){
+  if(dlgMode){ advDialog(); return; }
+  const n = nearby(); if(!n) return;
+  P.tx = null; P.ty = null;
+
+  if(n.t === 'keeper'){
+    if(S.stage === 3){
+      openDialog(S.cur.keeper, `Luar biasa, Detektif ${S.name}! Pusaka budaya ${S.cur.name} berhasil diamankan. Ini lencana kehormatan dan potongan sandi yang ditinggalkan komplotan!`, true, ()=>{
+        if(!S.done.includes(S.cur.id)) S.done.push(S.cur.id);
+        saveS();
+        S.stage = 4; updateObjHUD();
+        sfx('ok');
+        showRegionWin();
+      });
+    } else if(S.stage === 4){
+      openDialog(S.cur.keeper, `Terima kasih telah menyelamatkan warisan ${S.cur.name}, Detektif ${S.name}! Silakan klik tombol Peta Nusantara di kanan atas untuk menuju wilayah berikutnya.`, true);
+    } else {
+      openDialog(S.cur.keeper, document.getElementById('hud-obj').textContent, true);
+    }
     return;
   }
-  if(mode==='modal'){if(c==='Escape')closeM();return;}
-  if(mode==='play'&&act){const o=near();if(o)interact(o.id);}
-});
-addEventListener('keyup',e=>{keys[e.code]=false;});
-addEventListener('blur',()=>{for(const k in keys)keys[k]=false;});
-document.addEventListener('click',e=>{if(e.target.blur&&e.target.tagName==='BUTTON')e.target.blur();});
 
-cv.addEventListener('pointerdown',()=>ensureAudio());
-/* Joystick analog: arah dari posisi jari, kecepatan dari jarak geser */
-const js=$('#js'),kn=$('#kn'),AN={x:0,y:0,m:0};
-let jsP=null,jsTid=null;
-function jsSet(cx,cy){
-  const r=js.getBoundingClientRect(),dx=cx-(r.left+r.width/2),dy=cy-(r.top+r.height/2),d=Math.hypot(dx,dy),mx=r.width/2-14,dz=10;
-  const c=Math.min(d,mx),ux=d?dx/d:0,uy=d?dy/d:0;
-  kn.style.transform='translate('+(ux*c)+'px,'+(uy*c)+'px)';
-  if(d<dz){AN.m=0;AN.x=AN.y=0;}
-  else{AN.m=Math.min(1,(d-dz)/(mx-dz));AN.x=ux;AN.y=uy;target=null;}
+  const o = n.d;
+  // SUMATERA BARAT
+  if(S.cur.id === 'sumbar'){
+    if(o.type === 'scrap' && S.stage === 1){
+      S.scraps[o.scrapIdx] = true; sfx('ok');
+      const cnt = S.scraps.filter(Boolean).length;
+      updateObjHUD();
+      if(cnt < 4){
+        openDialog(o.name, `Menemukan serpihan naskah bumbu Rendang (${cnt}/4)! Lanjutkan mencari sisa serpihan di sekitar nagari.`, false);
+      } else {
+        S.stage = 2; updateObjHUD();
+        openDialog('NASKAH TERKUMPUL!', 'Keempat serpihan naskah berhasil ditemukan! Sekarang periksa PETI TONGGAK GADANG di depan Rumah Gadang.', false);
+      }
+      return;
+    }
+    if(o.id === 'peti_minang' && S.stage === 2){
+      openMg('sumbar_order'); return;
+    }
+  }
+
+  // JAWA BARAT
+  if(S.cur.id === 'jabar'){
+    if(o.type === 'witness' && S.stage === 1){
+      S.witnesses[o.wIdx] = true; sfx('click');
+      const cnt = S.witnesses.filter(Boolean).length;
+      updateObjHUD();
+      if(cnt < 3){
+        openDialog(o.name, `${o.statement} (Saksi terwawancara: ${cnt}/3)`, false);
+      } else {
+        openDialog(o.name, `${o.statement} — Semua saksi sudah bicara! Mari tentukan siapa yang berbohong.`, false, ()=>openMg('jabar_lie'));
+      }
+      return;
+    }
+    if(o.id === 'rak_angklung' && S.stage === 2){
+      openMg('jabar_angklung'); return;
+    }
+  }
+
+  // YOGYAKARTA
+  if(S.cur.id === 'jogja'){
+    if(o.id === 'prasasti' && S.stage === 1){
+      openDialog('BATU PRASASTI KUNO', 'Terpahat kalimat Bahasa Jawa: "Golekana gulungan ana ing meja sisih wetan." Mari susun artinya!', false, ()=>openMg('jogja_words'));
+      return;
+    }
+    if(o.id === 'meja_arsip' && S.stage === 2){
+      openMg('jogja_quiz'); return;
+    }
+  }
+
+  // BALI
+  if(S.cur.id === 'bali'){
+    if(o.type === 'pelinggih' && S.stage === 1){
+      const dirs = ['KAJA','KELOD','KANGIN','KAUH'];
+      S.pelinggih[o.pIdx] = (S.pelinggih[o.pIdx] + 1) % 4;
+      const curWord = dirs[S.pelinggih[o.pIdx]];
+      sfx('click'); updateObjHUD();
+      if(countBaliOk() === 4){
+        S.stage = 2; updateObjHUD(); sfx('ok');
+        openDialog('ASTA DIKPALAKA SELARAS!', `Pelinggih diarahkan ke ${curWord}. Keempat arah angin Bali (Kaja-Kelod-Kangin-Kauh) telah selaras! Kunci PETI LONTAR KAKAWIN terbuka sebagian.`, false);
+      } else {
+        openDialog(o.name, `Arah Pelinggih diubah menjadi: ${curWord}. (Selaras: ${countBaliOk()}/4 — Petunjuk: Kaja=Utara/Gunung, Kelod=Selatan/Laut, Kangin=Timur, Kauh=Barat).`, false);
+      }
+      return;
+    }
+    if(o.id === 'peti_bali' && S.stage === 2){
+      openMg('bali_quiz'); return;
+    }
+  }
+
+  openDialog(o.name, o.desc, false);
 }
-function jsEnd(){AN.m=0;AN.x=AN.y=0;kn.style.transform='';}
-js.addEventListener('pointerdown',e=>{e.preventDefault();ensureAudio();jsP=e.pointerId;try{js.setPointerCapture(e.pointerId);}catch(_){}jsSet(e.clientX,e.clientY);});
-js.addEventListener('pointermove',e=>{if(e.pointerId===jsP)jsSet(e.clientX,e.clientY);});
-['pointerup','pointercancel','lostpointercapture'].forEach(ev=>js.addEventListener(ev,e=>{if(e.pointerId===jsP){jsP=null;jsEnd();}}));
-js.addEventListener('touchstart',e=>{e.preventDefault();ensureAudio();const t0=e.changedTouches[0];jsTid=t0.identifier;jsSet(t0.clientX,t0.clientY);},{passive:false});
-js.addEventListener('touchmove',e=>{e.preventDefault();for(const t0 of e.changedTouches)if(t0.identifier===jsTid)jsSet(t0.clientX,t0.clientY);},{passive:false});
-['touchend','touchcancel'].forEach(ev=>js.addEventListener(ev,e=>{for(const t0 of e.changedTouches)if(t0.identifier===jsTid){jsTid=null;jsEnd();}}));
-js.oncontextmenu=e=>e.preventDefault();
-$('#ab').onpointerdown=e=>{e.preventDefault();ensureAudio();if(mode==='play'){const o=near();if(o)interact(o.id);}};
 
-/* ============================================================
-   LOOP
-   ============================================================ */
-let last=performance.now();
-function loop(now){
-  const dt=Math.min(.05,(now-last)/1000);last=now;t+=dt;
-  if(mode==='create')drawPreview();
-  else{if(mode==='play')update(dt);render(dt);}
-  typeUpdate(dt);
+function countBaliOk(){
+  const dirs = ['KAJA','KELOD','KANGIN','KAUH'];
+  const targets = ['KAJA','KELOD','KANGIN','KAUH'];
+  return S.pelinggih.filter((v,i)=>dirs[v]===targets[i]).length;
+}
+
+/* =========================================================
+   MINI-GAMES BUDAYA (7 VARIASI AKTIF)
+========================================================= */
+let mgType='', mgWords=[], mgChoice=-1, mgSeq=[], mgUserSeq=[];
+function openMg(type){
+  mgType = type; mgWords = []; mgChoice = -1;
+  document.getElementById('mg-fb').textContent = '';
+  document.getElementById('mg-fb').className = 'fb';
+  document.getElementById('mg-submit').style.display = 'inline-block';
+  document.getElementById('scr-mg').style.display = 'flex';
+
+  if(type === 'sumbar_order'){
+    document.getElementById('mg-tag').textContent = 'URUTKAN TRADISI MINANG';
+    document.getElementById('mg-step').textContent = 'Tahap 2/2';
+    document.getElementById('mg-prompt').textContent = 'Susun urutan tahapan memasak Rendang tradisional Minangkabau yang benar:';
+    document.getElementById('mg-clue').textContent = 'Proses memasak perlahan menghasilkan Gulai → Kalio → Rendang.';
+    renderChips(['1. Gulai (kuah santan encer)', '2. Kalio (kuah kental kecokelatan)', '3. Rendang (kering & berminyak)', '4. Sup Bening (kuah bening)']);
+  } else if(type === 'jabar_lie'){
+    document.getElementById('mg-tag').textContent = 'DEDUKSI KESAKSIAN';
+    document.getElementById('mg-step').textContent = 'Tahap 1/2';
+    document.getElementById('mg-prompt').textContent = 'Bandingkan pernyataan ketiga saksi! Siapakah yang keterangannya bertentangan dan berbohong?';
+    document.getElementById('mg-clue').textContent = 'Kang Dedi & Neng Sari bilang pencuri lari ke kulon (barat), sedangkan Mang Ujang berjaga di gerbang kulon sejak pagi.';
+    renderOpts(['Kang Dedi (mengaku melihat bayangan ke barat)', 'Neng Sari (mengaku mendengar bunyi angklung ke barat)', 'Mang Ujang (mengaku tidak ada siapa pun lewat gerbang barat)']);
+  } else if(type === 'jabar_angklung'){
+    document.getElementById('mg-tag').textContent = 'HARMONI ANGKLUNG BUHUN';
+    document.getElementById('mg-step').textContent = 'Tahap 2/2';
+    document.getElementById('mg-prompt').textContent = 'Dengarkan dan ulangi 4 urutan nada bambu Angklung Buhun untuk membuka kunci rak!';
+    document.getElementById('mg-clue').innerHTML = 'Klik tombol <b>Putar Ulang Nada</b> jika ingin mendengar lagi.';
+    document.getElementById('mg-submit').style.display = 'none';
+    const notes = [261.6, 293.7, 329.6, 392.0, 440.0];
+    const names = ['DO','RE','MI','SOL','LA'];
+    mgSeq = [0,2,3,4]; mgUserSeq = [];
+    document.getElementById('mg-body').innerHTML = `
+      <div style="text-align:center;margin-bottom:8px"><button class="btn sec" style="padding:4px 12px;font-size:1rem" onclick="playAngklungSeq()">🔊 Putar Ulang Nada</button></div>
+      <div class="angklung-row">${names.map((n,i)=>`<div class="bamboo" id="bmb-${i}" onclick="hitBamboo(${i},${notes[i]})">${n}</div>`).join('')}</div>
+    `;
+    setTimeout(playAngklungSeq, 350);
+  } else if(type === 'jogja_words'){
+    document.getElementById('mg-tag').textContent = 'SANDI BAHASA JAWA';
+    document.getElementById('mg-step').textContent = 'Tahap 1/2';
+    document.getElementById('mg-prompt').textContent = 'Susun terjemahan Bahasa Indonesia yang tepat dari prasasti ini:';
+    document.getElementById('mg-clue').textContent = '"Golekana gulungan ana ing meja sisih wetan"';
+    renderChips(['Carilah', 'gulungan', 'di', 'meja', 'sebelah', 'timur', 'barat', 'selatan']);
+  } else if(type === 'jogja_quiz'){
+    document.getElementById('mg-tag').textContent = 'WAWASAN WEDANG UWUH';
+    document.getElementById('mg-step').textContent = 'Tahap 2/2';
+    document.getElementById('mg-prompt').textContent = 'Bahan alami apakah yang memberikan warna merah khas pada Wedang Uwuh Imogiri?';
+    document.getElementById('mg-clue').textContent = 'Dalam bahasa Jawa, "uwuh" berarti dedaunan/rempah kering yang diseduh hangat.';
+    renderOpts(['Serutan Kayu Secang', 'Daun Pandan Suji', 'Bunga Telang Biru']);
+  } else if(type === 'bali_quiz'){
+    document.getElementById('mg-tag').textContent = 'SASTRA & FILOSOFI BALI';
+    document.getElementById('mg-step').textContent = 'Tahap 2/2';
+    document.getElementById('mg-prompt').textContent = 'Apa makna filosofis "Tri Hita Karana" yang tertulis di sampul Lontar Kakawin?';
+    document.getElementById('mg-clue').textContent = 'Pedoman hidup harmonis masyarakat Bali dalam menjaga keseimbangan semesta.';
+    renderOpts([
+      'Tiga penyebab kebahagiaan: harmoni dengan Tuhan, sesama manusia, dan alam',
+      'Tiga tingkatan atap pura pada arsitektur kerajaan Majapahit',
+      'Tiga jenis alat musik gamelan gong kebyar dari Buleleng'
+    ]);
+  }
+}
+
+function renderChips(list){
+  const b = document.getElementById('mg-body');
+  b.innerHTML = `<div class="slots" id="mg-slots">${mgWords.length?'':'<span style="color:#777">Klik pilihan di bawah secara berurutan...</span>'}</div><div class="bank" id="mg-bank"></div>`;
+  mgWords.forEach((w,idx)=>{
+    const c = document.createElement('button'); c.className='chip in'; c.textContent=w;
+    c.onclick=()=>{ mgWords.splice(idx,1); renderChips(list); };
+    document.getElementById('mg-slots').appendChild(c);
+  });
+  list.forEach(w=>{
+    const c = document.createElement('button'); c.className='chip'+(mgWords.includes(w)?' used':''); c.textContent=w;
+    c.onclick=()=>{ mgWords.push(w); renderChips(list); };
+    document.getElementById('mg-bank').appendChild(c);
+  });
+}
+function renderOpts(list){
+  document.getElementById('mg-body').innerHTML = list.map((t,i)=>`<button class="opt-btn ${mgChoice===i?'sel':''}" onclick="selOpt(${i})">${['A','B','C'][i]}. ${t}</button>`).join('');
+}
+function selOpt(i){ sfx('click'); mgChoice=i; document.querySelectorAll('.opt-btn').forEach((b,idx)=>b.classList.toggle('sel',idx===i)); }
+
+function playAngklungSeq(){
+  const notes = [261.6, 293.7, 329.6, 392.0, 440.0];
+  mgSeq.forEach((idx, step)=>{
+    setTimeout(()=>{
+      const el = document.getElementById('bmb-'+idx);
+      if(el){ el.classList.add('lit'); setTimeout(()=>el.classList.remove('lit'),260); }
+      beep(notes[idx], 0.25, 'triangle', 0.18);
+    }, step*420);
+  });
+}
+function hitBamboo(idx, freq){
+  beep(freq, 0.22, 'triangle', 0.18);
+  const el = document.getElementById('bmb-'+idx);
+  if(el){ el.classList.add('lit'); setTimeout(()=>el.classList.remove('lit'),180); }
+  mgUserSeq.push(idx);
+  const pos = mgUserSeq.length - 1;
+  const fb = document.getElementById('mg-fb');
+  if(mgUserSeq[pos] !== mgSeq[pos]){
+    sfx('err'); mgUserSeq = [];
+    fb.textContent = 'Nada meleset! Dengarkan ulang dan coba lagi.'; fb.className='fb err';
+  } else if(mgUserSeq.length === mgSeq.length){
+    sfx('ok');
+    fb.textContent = 'Harmoni Angklung Buhun berbunyi indah! Pusaka terselamatkan!'; fb.className='fb ok';
+    setTimeout(()=>{ closeMg(); S.stage=3; updateObjHUD(); openDialog('ANGKLUNG BUHUN AMAN!','Angklung Buhun berhasil diselamatkan! Segera lapor kembali kepada TEH NIA.',false); }, 950);
+  }
+}
+
+function checkMg(){
+  const fb = document.getElementById('mg-fb');
+  let ok = false, nextMsg = '', nextStage = 3;
+  if(mgType === 'sumbar_order'){
+    ok = (mgWords.join('|') === '1. Gulai (kuah santan encer)|2. Kalio (kuah kental kecokelatan)|3. Rendang (kering & berminyak)');
+    nextMsg = 'Naskah warisan kuliner Minang terkunci aman! Segera lapor ke UNI RAHMI.';
+  } else if(mgType === 'jabar_lie'){
+    ok = (mgChoice === 2); nextStage = 2;
+    nextMsg = 'Tepat! Mang Ujang berbohong untuk menutupi jejak pencuri ke arah barat. Sekarang periksa RAK ANGKLUNG BUHUN di depan Saung!';
+  } else if(mgType === 'jogja_words'){
+    ok = (mgWords.join(' ') === 'Carilah gulungan di meja sebelah timur'); nextStage = 2;
+    nextMsg = 'Benar! "Wetan" berarti Timur. Sekarang buka peti di MEJA ARSIP PUSAKA sebelah timur!';
+  } else if(mgType === 'jogja_quiz'){
+    ok = (mgChoice === 0);
+    nextMsg = 'Peti arsip terbuka dan Gulungan Resep Wedang Uwuh ditemukan! Lapor ke MBAH LOKA.';
+  } else if(mgType === 'bali_quiz'){
+    ok = (mgChoice === 0);
+    nextMsg = 'Lontar Kakawin Tri Hita Karana berhasil diamankan! Lapor kembali ke BLI MADE.';
+  }
+
+  if(ok){
+    sfx('ok'); fb.textContent = 'Jawaban tepat sekali!'; fb.className = 'fb ok';
+    setTimeout(()=>{ closeMg(); S.stage = nextStage; updateObjHUD(); openDialog('PETUNJUK TERPECAHKAN!', nextMsg, false); }, 900);
+  } else {
+    sfx('err'); fb.textContent = 'Belum tepat, periksa kembali petunjuk budaya di atas!'; fb.className = 'fb err';
+  }
+}
+function closeMg(){ document.getElementById('scr-mg').style.display = 'none'; }
+
+/* =========================================================
+   KEMENANGAN DAERAH, ARSIP LENCANA & EPILOG AKHIR
+========================================================= */
+function showRegionWin(){
+  const m = document.getElementById('modal-content');
+  m.innerHTML = `
+    <div style="font-size:2.4rem">🏅</div>
+    <h2 style="font-size:1.65rem;margin:4px 0">KASUS ${S.cur.name} SELESAI!</h2>
+    <p style="font-size:1.1rem;color:#333">Kamu mendapatkan Lencana Budaya & potongan sandi Komplotan Bayang Sengkala:</p>
+    <div style="border:2.5px solid #111;background:#f7f5f0;padding:10px;margin:12px 0;box-shadow:4px 4px 0 #111">
+      <div style="font-size:1.25rem;font-weight:bold">★ ${S.cur.badge.toUpperCase()} ★</div>
+      <div style="margin-top:4px;color:#d9381e;font-weight:bold">POTONGAN SANDI: "${S.cur.cipher}"</div>
+    </div>
+    <button class="btn red" onclick="closeModal();openMap()">LANJUT KE PETA NUSANTARA 🗺️</button>
+  `;
+  document.getElementById('scr-modal').style.display = 'flex';
+}
+function openBadges(){
+  sfx('click');
+  const order = ['sumbar','jabar','jogja','bali'];
+  const list = order.map(k=>{
+    const r = REG[k], ok = S.done.includes(k);
+    return `<div style="border:2px solid #111;padding:7px 10px;margin-bottom:6px;background:${ok?'#eef7f0':'#f5f5f5'};display:flex;justify-content:space-between">
+      <span><b>${r.name}</b> — ${r.badge}</span>
+      <span>${ok ? '✔ SANDI: '+r.cipher : '🔒 Terkunci'}</span>
+    </div>`;
+  }).join('');
+  document.getElementById('modal-content').innerHTML = `
+    <h2 style="font-size:1.55rem;border-bottom:2px solid #111;padding-bottom:6px;margin-bottom:10px">ARSIP LENCANA & SANDI (${S.done.length}/4)</h2>
+    <div style="text-align:left;margin-bottom:12px">${list}</div>
+    <button class="btn" onclick="closeModal()">Tutup</button>
+  `;
+  document.getElementById('scr-modal').style.display = 'flex';
+}
+function openEpilog(){
+  sfx('ok');
+  document.getElementById('modal-content').innerHTML = `
+    <div style="font-size:2.4rem">🎉🇮🇩🎉</div>
+    <h2 style="font-size:1.65rem;margin:4px 0">MISI NUSANTARA TUNTAS!</h2>
+    <p style="font-size:1.12rem;line-height:1.4;margin:10px 0">
+      Selamat, Detektif <b>${S.name}</b>! Keempat potongan sandi Komplotan Bayang Sengkala berhasil disatukan menjadi pesan abadi:<br><br>
+      <b style="font-size:1.35rem;background:#111;color:#fff;padding:4px 12px">"PUSAKA BUDAYA HARUS DIJAGA"</b><br><br>
+      Seluruh warisan Nusantara dari Sumatera Barat, Jawa Barat, Yogyakarta, hingga Bali telah kembali ke pangkuan masyarakat!
+    </p>
+    <button class="btn red" onclick="closeModal()">Kembali ke Peta</button>
+  `;
+  document.getElementById('scr-modal').style.display = 'flex';
+}
+function howto(){
+  sfx('click');
+  document.getElementById('modal-content').innerHTML = `
+    <h2 style="font-size:1.55rem;border-bottom:2px solid #111;padding-bottom:6px;margin-bottom:10px">CARA BERMAIN KARSALOKA</h2>
+    <p style="text-align:left;font-size:1.1rem;line-height:1.45;margin-bottom:14px">
+      1. Pilih salah satu dari <b>4 wilayah aktif</b> (Sumatera Barat, Jawa Barat, Yogyakarta, atau Bali) di Peta Misi Nusantara.<br>
+      2. Gerakkan karakter memakai <b>WASD / Panah</b>, <b>klik peta</b>, atau <b>Analog Joystick</b> di layar HP.<br>
+      3. Dekati warga, prasasti, atau benda budaya (muncul tanda <b>!</b>) lalu tekan <b>Spasi / PERIKSA</b> untuk memecahkan teka-teki budaya.<br>
+      4. Kumpulkan seluruh <b>4 Lencana & Sandi</b> untuk membuka Epilog Akhir!
+    </p>
+    <button class="btn" onclick="closeModal()">Mengerti!</button>
+  `;
+  document.getElementById('scr-modal').style.display = 'flex';
+}
+function closeModal(){ document.getElementById('scr-modal').style.display = 'none'; }
+
+/* =========================================================
+   KONTROL KEYBOARD, KLIK & ANALOG JOYSTICK SENTUH
+========================================================= */
+const keys = {};
+window.addEventListener('keydown', e=>{
+  keys[e.key] = true;
+  if(document.getElementById('scr-mg').style.display==='flex') return;
+  if([' ','Enter','z','Z'].includes(e.key) && document.getElementById('hud').style.display==='flex'){
+    e.preventDefault(); interact();
+  }
+});
+window.addEventListener('keyup', e=>{ keys[e.key] = false; });
+
+gc.addEventListener('click', e=>{
+  if(dlgMode){ advDialog(); return; }
+  if(document.getElementById('hud').style.display!=='flex') return;
+  const r = gc.getBoundingClientRect();
+  const cam = getCam();
+  const wx = (e.clientX - r.left)*(gc.width/r.width) + cam.x;
+  const wy = (e.clientY - r.top)*(gc.height/r.height) + cam.y;
+  const n = nearby();
+  if(n && Math.hypot(wx-n.d.x, wy-n.d.y) < 70){ interact(); return; }
+  P.tx = Math.max(85, Math.min(W-85, wx));
+  P.ty = Math.max(120, Math.min(H-85, wy));
+});
+
+// Analog Joystick
+let joyVec = {x:0, y:0};
+const jZone = document.getElementById('joy-zone'), jKnob = document.getElementById('joy-knob');
+function handleJoy(cx, cy){
+  const r = jZone.getBoundingClientRect();
+  const dx = cx - (r.left + r.width/2), dy = cy - (r.top + r.height/2);
+  const maxR = r.width/2 - 18, dist = Math.min(maxR, Math.hypot(dx,dy)), ang = Math.atan2(dy,dx);
+  const kx = Math.cos(ang)*dist, ky = Math.sin(ang)*dist;
+  jKnob.style.transform = `translate(${kx}px,${ky}px)`;
+  joyVec = dist > 8 ? {x:kx/maxR, y:ky/maxR} : {x:0, y:0};
+  if(dist > 8){ P.tx = null; P.ty = null; }
+}
+jZone.addEventListener('touchstart', e=>{ e.preventDefault(); handleJoy(e.touches[0].clientX, e.touches[0].clientY); });
+jZone.addEventListener('touchmove', e=>{ e.preventDefault(); handleJoy(e.touches[0].clientX, e.touches[0].clientY); });
+jZone.addEventListener('touchend', ()=>{ jKnob.style.transform='translate(0,0)'; joyVec={x:0,y:0}; });
+document.getElementById('act-btn').addEventListener('click', interact);
+
+/* =========================================================
+   RENDERING VISUAL (SKETSA OMORI & PROSEDURAL)
+========================================================= */
+function drawChar(c, x, y, sc, dir, bob, leg, opts){
+  c.save(); c.translate(x, y); c.scale(sc, sc);
+  c.fillStyle='rgba(17,17,17,.18)'; c.beginPath(); c.ellipse(0,20,15,6,0,0,Math.PI*2); c.fill();
+  c.strokeStyle='#111'; c.lineWidth=2.6;
+  c.beginPath(); c.moveTo(-6,10-bob); c.lineTo(-6,20+leg); c.moveTo(6,10-bob); c.lineTo(6,20-leg); c.stroke();
+  c.fillStyle=opts.outfit||'#fff'; c.beginPath(); c.roundRect(-12,-8-bob,24,20,5); c.fill(); c.stroke();
+  c.fillStyle=opts.scarf||'#d9381e'; c.fillRect(-12,-8-bob,24,6); c.strokeRect(-12,-8-bob,24,6);
+  c.fillStyle='#fff'; c.beginPath(); c.arc(0,-21-bob,13.5,0,Math.PI*2); c.fill(); c.stroke();
+  c.fillStyle='#111'; c.beginPath(); c.arc(0,-24-bob,14,Math.PI,Math.PI*2); c.fill();
+  if(opts.hat==='blangkon'){ c.fillStyle='#8b4513'; c.beginPath(); c.ellipse(0,-30-bob,15,7,0,Math.PI,Math.PI*2); c.fill(); c.stroke(); }
+  else if(opts.hat==='udeng'){ c.fillStyle='#fff'; c.fillRect(-14,-34-bob,28,7); c.strokeRect(-14,-34-bob,28,7); c.beginPath(); c.moveTo(-5,-34-bob); c.lineTo(0,-41-bob); c.lineTo(5,-34-bob); c.closePath(); c.fill(); c.stroke(); }
+  else if(opts.hat==='tikuluak'){ c.fillStyle='#9e2a2b'; c.beginPath(); c.moveTo(-18,-36-bob); c.quadraticCurveTo(0,-24-bob,18,-36-bob); c.lineTo(13,-26-bob); c.lineTo(-13,-26-bob); c.closePath(); c.fill(); c.stroke(); }
+  else if(opts.hat==='iket'){ c.fillStyle='#1d3557'; c.fillRect(-14,-33-bob,28,7); c.strokeRect(-14,-33-bob,28,7); }
+  if(dir!=='up'){
+    const ox = dir==='left'?-3:dir==='right'?3:0;
+    c.fillStyle='#111'; c.beginPath(); c.arc(-4+ox,-20-bob,2,0,Math.PI*2); c.arc(4+ox,-20-bob,2,0,Math.PI*2); c.fill();
+  }
+  if(opts.label){ c.fillStyle='#111'; c.font='bold 13px "Patrick Hand",monospace'; c.textAlign='center'; c.fillText(opts.label,0,35); }
+  c.restore();
+}
+
+function drawMenuCast(){
+  const mc = document.getElementById('menu-cast').getContext('2d');
+  mc.clearRect(0,0,520,110);
+  const cast = [
+    {x:75, hat:'none', outfit:'#fff', scarf:'#d9381e', label:'DETEKTIF'},
+    {x:168, hat:'tikuluak', outfit:'#9e2a2b', scarf:'#f4d35e', label:'UNI RAHMI'},
+    {x:260, hat:'iket', outfit:'#2b5876', scarf:'#f6d365', label:'TEH NIA'},
+    {x:352, hat:'blangkon', outfit:'#2c2c34', scarf:'#d9381e', label:'MBAH LOKA'},
+    {x:445, hat:'udeng', outfit:'#8c2d19', scarf:'#f2b705', label:'BLI MADE'}
+  ];
+  cast.forEach(k=>drawChar(mc, k.x, 62, 1.05, 'down', 0, 0, k));
+}
+drawMenuCast();
+
+function drawKeeperPortrait(){
+  if(!S.cur) return;
+  pCtx.clearRect(0,0,96,96);
+  pCtx.fillStyle='#fcfbf7'; pCtx.fillRect(0,0,96,96);
+  drawChar(pCtx, 48, 72, 1.9, 'down', 0, 0, {hat:S.cur.hat, outfit:S.cur.outfit, scarf:S.cur.scarf});
+}
+
+function getCam(){
+  return {
+    x: Math.max(0, Math.min(W - gc.width, P.x - gc.width/2)),
+    y: Math.max(0, Math.min(H - gc.height, P.y - gc.height/2))
+  };
+}
+
+function collide(nx, ny){
+  if(nx<75 || nx>W-75 || ny<110 || ny>H-75) return true;
+  if(Math.hypot(nx-KEEPER.x, ny-KEEPER.y) < 34) return true;
+  for(const o of S.cur.objs){
+    if(!o.solid) continue;
+    if(Math.abs(nx-o.x) < o.w/2+12 && Math.abs(ny-o.y) < o.h/2+8) return true;
+  }
+  return false;
+}
+
+let tick = 0;
+function loop(){
+  tick++;
+  if(S.cur && document.getElementById('hud').style.display==='flex'){
+    if(!dlgMode && document.getElementById('scr-mg').style.display!=='flex' && document.getElementById('scr-modal').style.display!=='flex'){
+      let dx=joyVec.x, dy=joyVec.y;
+      const spd = keys['Shift'] ? 5.4 : 3.6;
+      if(keys['ArrowUp']||keys['w']||keys['W']) dy-=1;
+      if(keys['ArrowDown']||keys['s']||keys['S']) dy+=1;
+      if(keys['ArrowLeft']||keys['a']||keys['A']) dx-=1;
+      if(keys['ArrowRight']||keys['d']||keys['D']) dx+=1;
+      if(dx!==0 || dy!==0){
+        P.tx=null; P.ty=null;
+        const l = Math.hypot(dx,dy); if(l>1){ dx/=l; dy/=l; }
+        dx*=spd; dy*=spd;
+      } else if(P.tx!==null){
+        const dfx=P.tx-P.x, dfy=P.ty-P.y, d=Math.hypot(dfx,dfy);
+        if(d>6){ dx=(dfx/d)*spd; dy=(dfy/d)*spd; } else { P.tx=null; P.ty=null; }
+      }
+      if(dx!==0 || dy!==0){
+        P.mov=true; P.cyc+=0.22;
+        P.dir = Math.abs(dx)>Math.abs(dy) ? (dx<0?'left':'right') : (dy<0?'up':'down');
+        if(!collide(P.x+dx, P.y)) P.x+=dx; else P.tx=null;
+        if(!collide(P.x, P.y+dy)) P.y+=dy; else P.ty=null;
+      } else { P.mov=false; P.cyc=0; }
+    }
+
+    const cam = getCam();
+    ctx.clearRect(0,0,gc.width,gc.height);
+    ctx.save(); ctx.translate(-cam.x, -cam.y);
+
+    // Latar wilayah
+    ctx.fillStyle = S.cur.bg; ctx.fillRect(0,0,W,H);
+    ctx.strokeStyle='#111'; ctx.lineWidth=4; ctx.strokeRect(48,76,W-96,H-124);
+    ctx.fillStyle = S.cur.path; ctx.fillRect(640,360,120,520); ctx.strokeRect(640,360,120,520);
+
+    // Target klik
+    if(P.tx!==null){ ctx.strokeStyle='#d9381e'; ctx.lineWidth=2; ctx.beginPath(); ctx.arc(P.tx,P.ty,9+Math.sin(tick*.2)*3,0,Math.PI*2); ctx.stroke(); }
+
+    // Objek budaya
+    for(const o of S.cur.objs){
+      if(o.type==='scrap' && S.scraps[o.scrapIdx]) continue;
+      const l=o.x-o.w/2, t=o.y-o.h/2;
+      ctx.fillStyle='#fff'; ctx.strokeStyle='#111'; ctx.lineWidth=2.5;
+      if(o.type==='gadang' || o.type==='pavilion'){
+        ctx.fillRect(l,t,o.w,o.h); ctx.strokeRect(l,t,o.w,o.h);
+        ctx.fillStyle=o.type==='gadang'?'#9e2a2b':'#222';
+        ctx.beginPath(); ctx.moveTo(l-20,t+18);
+        if(o.type==='gadang'){ ctx.quadraticCurveTo(o.x-60,t+5,o.x-90,t-55); ctx.lineTo(o.x,t-15); ctx.lineTo(o.x+90,t-55); ctx.quadraticCurveTo(o.x+60,t+5,l+o.w+20,t+18); }
+        else { ctx.lineTo(o.x,t-42); ctx.lineTo(l+o.w+20,t+18); }
+        ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.fillStyle='#111'; ctx.font='bold 15px "Patrick Hand",monospace'; ctx.textAlign='center'; ctx.fillText(o.name, o.x, t+64);
+      } else if(o.type==='witness'){
+        drawChar(ctx, o.x, o.y, 1, 'down', 0, 0, {outfit:'#5c6b73', scarf:'#e0fbfc', label:o.name});
+      } else if(o.type==='scrap'){
+        ctx.fillStyle='#fff3b0'; ctx.fillRect(l,t,o.w,o.h); ctx.strokeRect(l,t,o.w,o.h);
+        ctx.fillStyle='#d9381e'; ctx.font='bold 16px monospace'; ctx.textAlign='center'; ctx.fillText('📜',o.x,o.y+6);
+      } else if(o.type==='pelinggih'){
+        const dirs = ['KAJA','KELOD','KANGIN','KAUH'];
+        ctx.fillStyle='#e5dcc5'; ctx.fillRect(l,t,o.w,o.h); ctx.strokeRect(l,t,o.w,o.h);
+        ctx.fillStyle='#111'; ctx.font='bold 12px "Patrick Hand",monospace'; ctx.textAlign='center';
+        ctx.fillText(o.label, o.x, t-8);
+        ctx.fillStyle='#d9381e'; ctx.font='bold 15px "Patrick Hand",monospace';
+        ctx.fillText('['+dirs[S.pelinggih[o.pIdx]]+']', o.x, o.y+5);
+      } else {
+        ctx.fillStyle='#e3c896'; ctx.fillRect(l,t,o.w,o.h); ctx.strokeRect(l,t,o.w,o.h);
+        ctx.fillStyle='#111'; ctx.font='bold 13px "Patrick Hand",monospace'; ctx.textAlign='center'; ctx.fillText(o.name, o.x, t-6);
+      }
+    }
+
+    // Penjaga Loka & Pemain (Y-sorting)
+    const bob = P.mov ? Math.abs(Math.sin(P.cyc))*4 : 0;
+    const leg = P.mov ? Math.sin(P.cyc)*5 : 0;
+    const ents = [
+      {y:P.y, fn:()=>drawChar(ctx, P.x, P.y, 1, P.dir, bob, leg, {outfit:'#fff', scarf:'#d9381e', label:S.name})},
+      {y:KEEPER.y, fn:()=>drawChar(ctx, KEEPER.x, KEEPER.y, 1, 'down', 0, 0, {hat:S.cur.hat, outfit:S.cur.outfit, scarf:S.cur.scarf, label:S.cur.keeper})}
+    ];
+    ents.sort((a,b)=>a.y-b.y).forEach(e=>e.fn());
+
+    // Gelembung tanda seru !
+    const nb = nearby();
+    if(nb && !dlgMode){
+      const by = nb.d.y - 56 + Math.sin(tick*.18)*4;
+      ctx.fillStyle='#fff'; ctx.strokeStyle='#111'; ctx.lineWidth=2.5;
+      ctx.beginPath(); ctx.roundRect(nb.d.x-15, by-16, 30, 26, 6); ctx.fill(); ctx.stroke();
+      ctx.fillStyle='#d9381e'; ctx.font='bold 19px "Patrick Hand",monospace'; ctx.textAlign='center'; ctx.fillText('!', nb.d.x, by+3);
+    }
+    ctx.restore();
+  }
   requestAnimationFrame(loop);
 }
-buildBG();
-openCreator(true);
-requestAnimationFrame(loop);
+loop();
 </script>
 </body>
 </html>
